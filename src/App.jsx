@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Core3D from "./components/Core3D.jsx";
 import AssistantDock, { openAsk } from "./components/AssistantDock.jsx";
+import CoinCard from "./components/CoinCard.jsx";
 import Gate from "./components/Gate.jsx";
 import LangBar from "./components/LangBar.jsx";
 import Stander, { MARK, POSE_LIST, STANDER, VAULTS, WORDMARK_LIGHT } from "./components/Stander.jsx";
@@ -42,7 +43,14 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [layer, setLayer] = useState("sip-5");
   const [copied, setCopied] = useState("");
-  const [entered, setEntered] = useState(false);
+  const [entered, setEntered] = useState(() => {
+    try {
+      return sessionStorage.getItem("standx-entered") === "1";
+    } catch {
+      return false;
+    }
+  });
+  const [cardOn, setCardOn] = useState(false);
   const active = useActiveSection(SECTIONS);
   const shellRef = useRef(null);
 
@@ -133,7 +141,18 @@ export default function App() {
       <div className="glow" aria-hidden="true" />
       <div className="grain" aria-hidden="true" />
 
-      {!entered && <Gate onEnter={() => setEntered(true)} />}
+      {!entered && (
+        <Gate
+          onEnter={() => {
+            try {
+              sessionStorage.setItem("standx-entered", "1");
+            } catch {
+              /* ignore */
+            }
+            setEntered(true);
+          }}
+        />
+      )}
 
       <header className="nav">
         <a className="navLogo" href="#home">
@@ -222,7 +241,17 @@ export default function App() {
           </div>
 
           <div className="heroStage">
-            <Core3D markets={markets} selected={selected} onSelect={setSelected} />
+            <Core3D
+              markets={markets}
+              selected={selected}
+              onSelect={(symbol) => {
+                setSelected(symbol);
+                setCardOn(true);
+              }}
+            />
+            {cardOn && market && (
+              <CoinCard market={market} onClose={() => setCardOn(false)} />
+            )}
             <button type="button" className="heroHolo" onPointerDown={() => openAsk()}>
               <span className="heroHoloBeam" aria-hidden="true" />
               <span className="heroHoloBody">

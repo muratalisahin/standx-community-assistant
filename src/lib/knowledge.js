@@ -417,9 +417,9 @@ export const KNOWLEDGE = [
 
 /** Suggested questions shown under the assistant, per language. */
 export const SUGGESTIONS = {
-  tr: ["DUSD getirisi nereden geliyor?", "BTC kaç?", "Galatasaray nedir?", "Messi kim?", "SIP-5 nedir?"],
-  en: ["Where does DUSD yield come from?", "What's BTC doing?", "Who is Messi?", "What is SIP-5?", "What is the Premier League?"],
-  fr: ["D'où vient le rendement DUSD ?", "C’est combien BTC ?", "Qui est Messi ?", "Qu’est-ce que SIP-5 ?", "C’est quoi la Premier League ?"],
-  zh: ["DUSD 的收益从哪来？", "BTC 现在多少？", "梅西是谁？", "SIP-5 是什么？", "英超是什么？"],
-  ja: ["DUSD の利回りはどこから？", "BTC はいくら？", "メッシは誰？", "SIP-5 とは？", "プレミアリーグとは？"],
+  tr: ["DUSD getirisi nereden geliyor?", "BTC kaç?", "SIP-5 nedir?", "Ethereum nedir?", "Likidasyon nasıl çalışır?"],
+  en: ["Where does DUSD yield come from?", "What's BTC doing?", "What is SIP-5?", "What is Ethereum?", "How does liquidation work?"],
+  fr: ["D'où vient le rendement DUSD ?", "C’est combien BTC ?", "Qu’est-ce que SIP-5 ?", "C’est quoi Ethereum ?", "Comment marche la liquidation ?"],
+  zh: ["DUSD 的收益从哪来？", "BTC 现在多少？", "SIP-5 是什么？", "以太坊是什么？", "清算怎么运作？"],
+  ja: ["DUSD の利回りはどこから？", "BTC はいくら？", "SIP-5 とは？", "イーサリアムとは？", "清算はどう動く？"],
 };

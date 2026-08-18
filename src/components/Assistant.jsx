@@ -7,7 +7,7 @@ import { SUGGESTIONS } from "../lib/knowledge.js";
 
 let seq = 0;
 
-export default function Assistant({ compact = false }) {
+export default function Assistant({ compact = false, seed = "", seedTick = 0 }) {
   const { lang, t } = useLang();
   const [thread, setThread] = useState([]);
   const [draft, setDraft] = useState("");
@@ -26,7 +26,7 @@ export default function Assistant({ compact = false }) {
 
   async function send(text) {
     const q = String(text || "").trim();
-    if (!q || thinking) return;
+    if (!q) return;
     setDraft("");
     setThread((list) => [...list, { id: ++seq, role: "you", text: q }]);
     setThinking(true);
@@ -44,6 +44,19 @@ export default function Assistant({ compact = false }) {
       setThinking(false);
     }
   }
+
+  const sendRef = useRef(send);
+  sendRef.current = send;
+  const askedToken = useRef("");
+
+  useEffect(() => {
+    const q = String(seed || "").trim();
+    if (!q || !seedTick) return;
+    const token = `${seedTick}:${q}`;
+    if (token === askedToken.current) return;
+    askedToken.current = token;
+    sendRef.current(q);
+  }, [seed, seedTick]);
 
   const suggestions = SUGGESTIONS[lang] || SUGGESTIONS.en;
 

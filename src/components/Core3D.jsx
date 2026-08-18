@@ -5,10 +5,10 @@ import * as THREE from "three";
  * The hero scene: a DUSD core with one orbiting node per live market.
  * Node size follows open interest, colour follows the last tick, orbit speed follows volume.
  */
-export default function Core3D({ markets = [], selected, onSelect }) {
+export default function Core3D({ markets = [], selected, onSelect, onAsk }) {
   const hostRef = useRef(null);
-  const props = useRef({ markets, selected, onSelect });
-  props.current = { markets, selected, onSelect };
+  const props = useRef({ markets, selected, onSelect, onAsk });
+  props.current = { markets, selected, onSelect, onAsk };
 
   useEffect(() => {
     const host = hostRef.current;
@@ -19,7 +19,7 @@ export default function Core3D({ markets = [], selected, onSelect }) {
     scene.fog = new THREE.FogExp2(0x04070a, 0.032);
 
     const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 100);
-    camera.position.set(0, 3.4, 11.5);
+    camera.position.set(0, 3.6, 13.2);
     camera.lookAt(0, 0.4, 0);
 
     let renderer;
@@ -32,6 +32,8 @@ export default function Core3D({ markets = [], selected, onSelect }) {
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.42;
+    renderer.domElement.style.pointerEvents = "none";
+    host.style.cursor = "grab";
     host.appendChild(renderer.domElement);
 
     scene.add(new THREE.AmbientLight(0x8fefb8, 0.72));
@@ -113,7 +115,7 @@ export default function Core3D({ markets = [], selected, onSelect }) {
       c.height = 96;
       const g = c.getContext("2d");
       g.clearRect(0, 0, 256, 96);
-      g.font = "700 44px 'Space Grotesk', 'Segoe UI', sans-serif";
+      g.font = "700 52px 'Space Grotesk', 'Segoe UI', sans-serif";
       g.textAlign = "center";
       g.textBaseline = "middle";
       g.fillStyle = hot ? "#b8ffd4" : "#f3fff8";
@@ -138,21 +140,32 @@ export default function Core3D({ markets = [], selected, onSelect }) {
             metalness: 0.45,
             roughness: 0.22,
           });
-          const body = new THREE.Mesh(new THREE.OctahedronGeometry(0.34, 0), mat);
+          const body = new THREE.Mesh(new THREE.OctahedronGeometry(0.52, 0), mat);
           const halo = new THREE.Mesh(
-            new THREE.TorusGeometry(0.5, 0.014, 8, 40),
+            new THREE.TorusGeometry(0.74, 0.022, 8, 48),
             new THREE.MeshBasicMaterial({ color: 0x6dffb4, transparent: true, opacity: 0.55 })
           );
           halo.rotation.x = Math.PI / 2;
           const sprite = new THREE.Sprite(
             new THREE.SpriteMaterial({ map: labelTexture(m.symbol.split("-")[0], false), transparent: true })
           );
-          sprite.position.y = 0.78;
-          sprite.scale.set(1.7, 0.64, 1);
-          g.add(body, halo, sprite);
+          sprite.position.y = 1.12;
+          sprite.scale.set(2.35, 0.88, 1);
+          const hit = new THREE.Mesh(
+            new THREE.SphereGeometry(1.25, 12, 12),
+            new THREE.MeshBasicMaterial({
+              transparent: true,
+              opacity: 0,
+              depthWrite: false,
+              colorWrite: false,
+            })
+          );
+          g.add(body, halo, sprite, hit);
           g.userData.pick = { kind: "market", symbol: m.symbol };
           body.userData.pick = g.userData.pick;
           halo.userData.pick = g.userData.pick;
+          sprite.userData.pick = g.userData.pick;
+          hit.userData.pick = g.userData.pick;
           nodes.add(g);
           rec = { g, body, halo, sprite, mat, label: "" };
           bySymbol.set(m.symbol, rec);
@@ -160,7 +173,7 @@ export default function Core3D({ markets = [], selected, onSelect }) {
         rec.market = m;
         rec.index = i;
         rec.total = list.length;
-        rec.scale = 0.72 + 0.75 * Math.sqrt((m.oi || 0) / maxOi);
+        rec.scale = 0.95 + 0.95 * Math.sqrt((m.oi || 0) / maxOi);
       });
       for (const [sym, rec] of bySymbol) {
         if (!seen.has(sym)) {
@@ -171,41 +184,53 @@ export default function Core3D({ markets = [], selected, onSelect }) {
     }
 
     const ray = new THREE.Raycaster();
+    ray.params.Points.threshold = 0.35;
     const pointer = new THREE.Vector2();
-    let hovering = false;
+    let hoverSymbol = "";
 
     const pick = (e) => {
-      const r = renderer.domElement.getBoundingClientRect();
+      const r = host.getBoundingClientRect();
+      if (!r.width || !r.height) return null;
       pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1;
       pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1;
       ray.setFromCamera(pointer, camera);
-      const hits = ray.intersectObjects([core, nodes], true);
-      let obj = hits[0]?.object;
-      while (obj && !obj.userData.pick) obj = obj.parent;
-      return obj?.userData.pick || null;
+      const hits = ray.intersectObjects(nodes.children, true);
+      for (const h of hits) {
+        let obj = h.object;
+        while (obj && !obj.userData.pick) obj = obj.parent;
+        if (obj?.userData.pick?.kind === "market") return obj.userData.pick;
+      }
+      return null;
     };
 
     const onMove = (e) => {
       const hit = pick(e);
-      hovering = !!hit;
-      renderer.domElement.style.cursor = hit ? "pointer" : "grab";
-      const r = renderer.domElement.getBoundingClientRect();
-      tiltTarget.x = ((e.clientY - r.top) / r.height - 0.5) * 0.25;
-      tiltTarget.y = ((e.clientX - r.left) / r.width - 0.5) * 0.5;
+      hoverSymbol = hit?.kind === "market" ? hit.symbol : "";
+      host.style.cursor = hoverSymbol ? "pointer" : "grab";
+      const r = host.getBoundingClientRect();
+      tiltTarget.x = ((e.clientY - r.top) / r.height - 0.5) * 0.18;
+      tiltTarget.y = ((e.clientX - r.left) / r.width - 0.5) * 0.35;
     };
     const onDown = (e) => {
       const hit = pick(e);
-      if (hit?.kind === "market") props.current.onSelect?.(hit.symbol);
+      if (hit?.kind !== "market") return;
+      e.preventDefault();
+      e.stopPropagation();
+      props.current.onSelect?.(hit.symbol);
+      props.current.onAsk?.(hit.symbol);
     };
     const onLeave = () => {
+      hoverSymbol = "";
+      host.style.cursor = "grab";
       tiltTarget.x = 0;
       tiltTarget.y = 0;
     };
     const tilt = { x: 0, y: 0 };
     const tiltTarget = { x: 0, y: 0 };
-    renderer.domElement.addEventListener("pointermove", onMove);
-    renderer.domElement.addEventListener("pointerdown", onDown);
-    renderer.domElement.addEventListener("pointerleave", onLeave);
+    host.addEventListener("pointermove", onMove);
+    host.addEventListener("pointerdown", onDown);
+    host.addEventListener("pointerleave", onLeave);
+    host.style.touchAction = "none";
 
     function fit() {
       const w = Math.max(2, host.clientWidth);
@@ -215,7 +240,7 @@ export default function Core3D({ markets = [], selected, onSelect }) {
       camera.userData.h = h;
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
-      renderer.setSize(w, h, false);
+      renderer.setSize(w, h, true);
     }
     fit();
     const ro = new ResizeObserver(fit);
@@ -239,7 +264,7 @@ export default function Core3D({ markets = [], selected, onSelect }) {
           const rec = bySymbol.get(m.symbol);
           if (!rec) continue;
           rec.market = m;
-          rec.scale = 0.72 + 0.75 * Math.sqrt((m.oi || 0) / maxOi);
+          rec.scale = 0.95 + 0.95 * Math.sqrt((m.oi || 0) / maxOi);
         }
       }
 
@@ -256,18 +281,18 @@ export default function Core3D({ markets = [], selected, onSelect }) {
 
       for (const rec of bySymbol.values()) {
         const { index = 0, total = 1, market } = rec;
-        const radius = 3.9 + (index % 3) * 0.55;
+        const radius = 4.55 + (index % 3) * 0.7;
         const speed = 0.1 + Math.min(0.22, (market?.volume || 0) / 4e9);
         const angle = (index / total) * Math.PI * 2 + spin * speed;
         const y = Math.sin(spin * 0.5 + index) * 0.42;
         rec.g.position.set(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
         rec.g.rotation.y = spin * 0.6 + index;
-        const hot = p.selected === market?.symbol;
-        const target = rec.scale * (hot ? 1.45 : 1);
-        rec.g.scale.lerp(new THREE.Vector3(target, target, target), 0.12);
+        const hot = hoverSymbol === market?.symbol || p.selected === market?.symbol;
+        const target = rec.scale * (hot ? 1.78 : 1);
+        rec.g.scale.lerp(new THREE.Vector3(target, target, target), 0.18);
         const up = (market?.change || 0) >= 0;
         rec.mat.emissive.setHex(hot ? 0xb8ffd4 : up ? 0x2ee27a : 0xff5a6a);
-        rec.mat.emissiveIntensity = hot ? 2.4 : 1.25;
+        rec.mat.emissiveIntensity = hot ? 2.5 : 1.25;
         rec.halo.material.opacity = hot ? 1 : 0.42;
         rec.halo.scale.setScalar(1 + Math.sin(t * 2 + index) * 0.07);
         const label = `${market?.symbol.split("-")[0]}|${hot}`;
@@ -287,13 +312,13 @@ export default function Core3D({ markets = [], selected, onSelect }) {
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
-      renderer.domElement.removeEventListener("pointermove", onMove);
-      renderer.domElement.removeEventListener("pointerdown", onDown);
-      renderer.domElement.removeEventListener("pointerleave", onLeave);
+      host.removeEventListener("pointermove", onMove);
+      host.removeEventListener("pointerdown", onDown);
+      host.removeEventListener("pointerleave", onLeave);
       renderer.dispose();
       if (renderer.domElement.parentNode === host) host.removeChild(renderer.domElement);
     };
   }, []);
 
-  return <div className="core3d" ref={hostRef} aria-hidden="true" />;
+  return <div className="core3d" ref={hostRef} />;
 }

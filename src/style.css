@@ -278,16 +278,113 @@ main { position: relative; z-index: 5; }
 
 .fine { display: flex; align-items: center; gap: 8px; margin: 18px 0 0; font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--dim); flex-wrap: wrap; }
 
-.heroStage { position: relative; aspect-ratio: 1 / 1; min-height: 320px; }
-.core3d { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.heroStage { position: relative; aspect-ratio: 1 / 1; min-height: 320px; z-index: 2; }
+.core3d { position: absolute; inset: 0; z-index: 2; pointer-events: auto; cursor: grab; }
 .core3d canvas { display: block; width: 100% !important; height: 100% !important; pointer-events: none; }
+
+.coinCard {
+  position: absolute;
+  left: 10px;
+  top: 12px;
+  z-index: 26;
+  width: min(268px, calc(100% - 28px));
+  padding: 12px 12px 10px;
+  border-radius: 16px;
+  border: 1px solid #2ee27a55;
+  background: linear-gradient(165deg, #0c1814ee, #07100ce8 55%, #08131aee);
+  box-shadow: 0 0 0 1px #ffffff0f, 0 18px 40px #04140b88, 0 0 28px #2ee27a33;
+  backdrop-filter: blur(10px);
+  pointer-events: auto;
+  animation: coinCardIn 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes coinCardIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+.coinCardBrand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.coinCardMark { width: 22px; height: 22px; flex: none; }
+.coinCardWord { height: 13px; width: auto; opacity: 0.92; }
+.coinCardClose {
+  margin-left: auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #ffffff08;
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+.coinCardClose:hover { border-color: var(--green); color: var(--green); }
+.coinCardTop { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.coinCardTop h3 {
+  margin: 0;
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+}
+.coinCardTop strong {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 16px;
+}
+.coinCardTop em { font-style: normal; font-family: "IBM Plex Mono", monospace; font-size: 12px; }
+.coinCard .up { color: var(--green); }
+.coinCard .down { color: var(--red); }
+.coinCardStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin: 10px 0 0;
+}
+.coinCardStats div { min-width: 0; }
+.coinCardStats dt {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+.coinCardStats dd {
+  margin: 3px 0 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+}
+.coinCardBlurb {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #c5d6cc;
+}
+.coinCardMeta {
+  margin: 6px 0 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  color: var(--dim);
+}
+.coinCardGo {
+  display: inline-flex;
+  margin-top: 10px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--green);
+  text-decoration: none;
+}
+.coinCardGo:hover { text-shadow: 0 0 12px #2ee27a88; }
 
 .heroHolo {
   position: absolute;
   right: -1%;
   bottom: 2%;
   z-index: 20;
-  pointer-events: auto;
+  pointer-events: none;
   width: clamp(158px, 32%, 268px);
   margin: 0;
   padding: 0;
@@ -323,6 +420,7 @@ main { position: relative; z-index: 5; }
   position: relative;
   z-index: 1;
   display: block;
+  pointer-events: auto;
   animation: holoFloat 3.1s ease-in-out infinite;
 }
 .heroHoloBody img {
@@ -683,11 +781,12 @@ main { position: relative; z-index: 5; }
   bottom: 16px;
 }
 .dockInner {
-  pointer-events: auto;
+  pointer-events: none;
   width: 132px;
 }
 .assistantRail.open .dockInner {
   width: min(400px, calc(100vw - 28px));
+  pointer-events: auto;
 }
 .dockFab {
   position: relative;
@@ -700,6 +799,7 @@ main { position: relative; z-index: 5; }
   background: none;
   cursor: pointer;
   font: inherit;
+  pointer-events: none;
   transform-origin: center bottom;
   transition: transform 0.28s cubic-bezier(0.22, 1.4, 0.36, 1);
 }
@@ -712,6 +812,7 @@ main { position: relative; z-index: 5; }
   z-index: 2;
   width: 108px;
   height: 108px;
+  pointer-events: auto;
   animation: hop 1.15s cubic-bezier(0.22, 1.4, 0.36, 1) infinite;
 }
 .dockHop .stander { animation: none; width: 100%; height: 100%; }
@@ -796,6 +897,7 @@ main { position: relative; z-index: 5; }
   transform: rotate(45deg);
 }
 .dockPanel { position: relative; }
+.dockPanel[hidden] { display: none !important; }
 .dockClose {
   position: absolute;
   top: 10px;
