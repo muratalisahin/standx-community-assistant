@@ -174,6 +174,14 @@ export default function App() {
           >
             {t.navAsk}
           </a>
+          <a
+            className="navTradeMobile"
+            href={LINKS.perps}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {t.trade}
+          </a>
         </nav>
 
         <div className="navRight">

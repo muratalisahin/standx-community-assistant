@@ -90,7 +90,7 @@ const LISTED_WIKI = {
 };
 
 const STANDX_RE =
-  /\b(dusd|standx|stander|sip-?\d|perps?|perpetual|likidasyon|liquidation|maker|taker|redeem|mint|vault|holder|cash wallet|cüzdan|block trade|adl|marj|margin|kaldıra[cç]|leverage|oracle|slp|greenlist|mainnet|teminat|collateral|funding)\b/i;
+  /\b(dusd|standx|stander|sip-?\d|perps?|perpetual|likidasyon|liquidation|maker|taker|redeem|mint|vault|holder|cash wallet|cüzdan|block trade|adl|marj|margin|kaldıra[cç]|leverage|oracle|slp|greenlist|mainnet|teminat|collateral|funding|discord|discort|engage point|growth path)\b/i;
 
 const SPORT_RE =
   /\b(futbol|football|soccer|basketbol|basketball|nba|nfl|ucl|şampiyonlar ligi|messi|ronaldo|haaland|mbappe|galatasaray|fenerbah|beşiktaş|besiktas|trabzonspor|dünya kupası|world cup|olimpiyat|olympic|formula ?1|tenis|tennis|premier league|la liga|serie a|bundesliga|süper lig|super lig|derbi|lakers|celtics|fifa|uefa)\b/i;

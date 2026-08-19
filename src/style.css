@@ -22,7 +22,9 @@ body {
   font-family: Inter, "Segoe UI", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
+body.dock-open { overflow: hidden; touch-action: none; }
 img { max-width: 100%; }
 a { color: inherit; }
 
@@ -62,6 +64,7 @@ a { color: inherit; }
   align-items: center;
   gap: 18px;
   padding: 12px clamp(14px, 4vw, 40px);
+  padding-top: max(12px, env(safe-area-inset-top));
   background: #04070ad9;
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
@@ -121,6 +124,16 @@ a { color: inherit; }
   height: 2px;
   background: var(--green);
   border-radius: 2px;
+}
+.navTradeMobile {
+  display: none;
+  margin-top: 6px;
+  padding: 13px 16px !important;
+  border-radius: 10px !important;
+  background: var(--green) !important;
+  color: #04140b !important;
+  font-weight: 800 !important;
+  text-align: center;
 }
 
 .navRight { display: flex; align-items: center; gap: 10px; }
@@ -779,7 +792,9 @@ main { position: relative; z-index: 5; }
 .assistantRail.open {
   top: auto;
   bottom: 16px;
+  pointer-events: auto;
 }
+.dockBackdrop { display: none; }
 .dockInner {
   pointer-events: none;
   width: 132px;
@@ -1117,40 +1132,192 @@ main { position: relative; z-index: 5; }
   .heroHoloBubble { font-size: 11px; left: 0; }
   .inspect, .layerBody, .brandGrid { grid-template-columns: 1fr; }
 }
+
 @media (max-width: 860px) {
+  .pageMain { padding-bottom: calc(108px + env(safe-area-inset-bottom)); }
+
+  .nav { gap: 10px; }
+  .navLogo b { display: none; }
+  .navLogo { gap: 6px; min-width: 0; }
+  .navMark { width: 30px; height: 30px; flex: none; }
+  .navWord { height: 16px; max-width: 72px; object-fit: contain; object-position: left center; }
+
   .navLinks {
-    position: absolute;
-    top: 100%;
+    position: fixed;
+    top: calc(54px + env(safe-area-inset-top));
     left: 0;
     right: 0;
     flex-direction: column;
     gap: 2px;
-    padding: 10px;
+    padding: 10px 12px max(12px, env(safe-area-inset-bottom));
+    max-height: calc(100dvh - 54px - env(safe-area-inset-top));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     background: #050a0cf5;
     border-bottom: 1px solid var(--line);
     backdrop-filter: blur(14px);
     display: none;
+    z-index: 39;
   }
   .navLinks.open { display: flex; }
-  .navLinks a { padding: 13px; font-size: 15px; }
+  .navLinks a { padding: 14px 13px; font-size: 15px; min-height: 48px; display: flex; align-items: center; }
   .navLinks a.on::after { display: none; }
-  .burger { display: flex; }
+  .navTradeMobile { display: flex; align-items: center; justify-content: center; }
+  .burger { display: flex; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
   .cta { display: none; }
-  .statRow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .langBar button { min-width: 36px; min-height: 36px; }
+
+  .section { padding: clamp(40px, 8vw, 72px) clamp(12px, 4vw, 24px); }
+  .sectionHead { margin-bottom: 24px; }
+  .sectionHead p { font-size: 15px; }
+
+  .hero { padding-top: clamp(24px, 5vw, 48px); gap: 20px; }
+  .hero h1 { font-size: clamp(36px, 11vw, 64px); line-height: 0.96; }
+  .lead { font-size: 15px; margin-top: 16px; }
+  .heroBtns { margin-top: 20px; }
+  .heroBtns .btn { flex: 1 1 calc(50% - 6px); min-height: 48px; padding: 0 16px; font-size: 13px; }
+  .statRow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 24px; }
+  .stat { padding: 12px; }
+  .stat b { font-size: 15px; }
+  .heroStage { aspect-ratio: 4 / 3; min-height: 220px; max-height: 52dvh; }
+  .heroHolo { width: clamp(100px, 28%, 160px); right: 0; bottom: 0; }
+  .heroHoloBubble { display: none; }
+  .coinCard { left: 8px; top: 8px; width: min(260px, calc(100% - 16px)); }
+
+  .marketGrid { grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 8px; }
+  .marketCard { padding: 12px 10px; min-height: 44px; }
+  .marketCard b { font-size: 13px; }
+  .marketCard strong { font-size: 14px; }
+
+  .inspectMain, .xray { padding: 14px; }
+  .layerRow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .layerRow button { min-height: 48px; padding: 12px 10px; }
+  .layerBody article, .layerBody aside { padding: 16px; }
+  .steps { grid-template-columns: 1fr; }
+  .cards { grid-template-columns: 1fr; }
+
   .bubble { max-width: 92%; }
-  .assistantLog { max-height: 340px; }
+  .assistantLog {
+    max-height: 340px;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  .assistantChips button { min-height: 40px; }
+  .assistantForm {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 14px 16px max(16px, env(safe-area-inset-bottom));
+  }
+  .assistantForm input { flex: 1 1 auto; width: 100%; font-size: 16px; }
+  .assistantForm button { width: 100%; min-height: 48px; }
+  .assistantForm button.ghost { order: 3; }
+
+  /* floating dock → bottom sheet when open */
+  .assistantRail {
+    right: 10px;
+    top: auto;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    left: auto;
+  }
+  .assistantRail.open {
+    inset: auto 0 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    pointer-events: auto;
+  }
+  .dockBackdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    border: 0;
+    padding: 0;
+    background: #00000088;
+    backdrop-filter: blur(3px);
+    cursor: pointer;
+  }
   .dockInner { width: 100px; }
+  .assistantRail.open .dockInner {
+    width: 100%;
+    max-width: none;
+    border-radius: 18px 18px 0 0;
+    overflow: hidden;
+    box-shadow: 0 -12px 48px #000c;
+    position: relative;
+    z-index: 1;
+  }
+  .assistantRail.open .assistant.compact .assistantLog {
+    max-height: min(46dvh, 360px);
+  }
   .dockFab { width: 100px; min-height: 140px; }
   .dockHop { width: 88px; height: 88px; }
   .dockBubble {
-    font-size: 12px;
-    padding: 8px 10px;
-    top: 10px;
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: calc(100% + 6px);
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 11px;
+    padding: 7px 11px;
+    border-radius: 12px 12px 12px 12px;
   }
-  .assistantRail { right: 10px; top: auto; bottom: 28px; }
+  .dockBubble::after {
+    right: auto;
+    left: 50%;
+    bottom: -5px;
+    top: auto;
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .foot {
+    padding-bottom: max(48px, calc(24px + env(safe-area-inset-bottom)));
+  }
+  .gateStage {
+    max-height: 100dvh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+  }
+  .gateHolo, .gateHolo .holoWrap, .gateMascot { width: 140px; height: 140px; }
+  .gateLangs button { min-width: 80px; min-height: 48px; }
 }
+
 @media (max-width: 460px) {
-  .navWord { height: 15px; }
-  .langBar button { padding: 6px 7px; font-size: 10px; }
+  .navWord { max-width: 58px; height: 14px; }
+  .langBar { gap: 2px; padding: 2px; }
+  .langBar button { padding: 6px 6px; font-size: 10px; min-width: 32px; }
+
+  .hero h1 { font-size: clamp(32px, 10.5vw, 48px); }
+  .heroBtns .btn { flex: 1 1 100%; }
   .statRow { grid-template-columns: 1fr 1fr; }
+  .stat span { font-size: 8.5px; }
+
+  .tickerTrack span { font-size: 11px; }
+  .marketGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .marketCard span { display: none; }
+  .inspectTop h3 { font-size: 20px; }
+  .inspectTop strong { font-size: 17px; }
+
+  .layerRow { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .layerRow small { font-size: 11px; }
+  .poseRow { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .poseRow img { height: 48px; }
+
+  .assistantHead { padding: 14px 16px; gap: 10px; flex-wrap: wrap; }
+  .assistantHead strong { font-size: 17px; }
+  .assistantCount { margin-left: 0; }
+  .assistantChips { padding: 0 14px 12px; gap: 6px; }
+  .assistantChips span { width: 100%; margin-bottom: 2px; }
+  .assistantChips button { font-size: 12px; padding: 8px 10px; }
+  .dockInner { width: 88px; }
+  .dockFab { width: 88px; min-height: 120px; }
+  .dockHop { width: 76px; height: 76px; }
+  .dockBubble { display: none; }
+
+  .footBrand { flex-direction: column; align-items: flex-start; }
+  .footCols { grid-template-columns: 1fr 1fr; gap: 14px; }
 }

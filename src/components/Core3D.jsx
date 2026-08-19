@@ -28,7 +28,7 @@ export default function Core3D({ markets = [], selected, onSelect, onAsk }) {
     } catch {
       return;
     }
-    renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+    renderer.setPixelRatio(Math.min(window.innerWidth < 768 ? 1.25 : 2, window.devicePixelRatio || 1));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.42;

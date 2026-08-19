@@ -41,8 +41,30 @@ export default function AssistantDock() {
     };
   }, [openChat]);
 
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.classList.add("dock-open");
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.classList.remove("dock-open");
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
   return (
     <aside className={`assistantRail ${open ? "open" : ""}`} aria-live="polite">
+      {open && (
+        <button
+          type="button"
+          className="dockBackdrop"
+          aria-label={t.askClose}
+          onClick={() => {
+            setOpen(false);
+            setSeed("");
+          }}
+        />
+      )}
       <div className="dockInner">
         <div className="dockPanel" hidden={!open}>
           <button

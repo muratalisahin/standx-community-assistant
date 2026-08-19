@@ -413,13 +413,85 @@ export const KNOWLEDGE = [
       ja: "発行体は英領ヴァージン諸島設立の StandX Issuer Ltd（会社番号 2163662）です。利用者は 18 歳以上である必要があります。ジオブロック対象の法域には米国、英国、ロシア、イラン、キューバ、北朝鮮、シリア、ベネズエラなどが含まれます。発行体と直接の購入・償還を行うには「Greenlisted」、すなわちオンボーディングと KYC/AML の完了が必要です。準拠法はイングランド及びウェールズ法で、紛争は LCIA 規則に基づきロンドンで仲裁人 3 名により解決されます。",
     },
   },
+  {
+    id: "discord-join",
+    source: "/blog/articles/standx-recap-of-milestones-activities-and-ecosystem-evolution-p1",
+    tags: "discord discort discrod sunucu server katıl join davet invite link topluluk community nereye nasıl girilir gir 加入 サーバー 参加",
+    a: {
+      tr: "StandX Discord sunucusuna resmî davet linkiyle katıl: discord.gg/standx. Girdikten sonra sunucunun istediği doğrulamayı (captcha, kuralları kabul vb.) tamamla; aksi halde kanalları göremezsin. Discord, duyuruların, kampanyaların, squad'ların, town hall'ların ve destek biletlerinin merkezi — resmî X hesabı ve standx.com'daki linkler de aynı adrese yönlendirir.",
+      en: "Join the StandX Discord through the official invite: discord.gg/standx. After joining, complete whatever verification the server asks for (captcha, rules acceptance, etc.) or you will not see the channels. Discord is the hub for announcements, campaigns, squads, town halls and support tickets — the official X account and standx.com links point to the same address.",
+      fr: "Rejoins le Discord StandX via l'invitation officielle : discord.gg/standx. Une fois dedans, complète la vérification demandée (captcha, acceptation des règles, etc.) sinon les salons restent invisibles. Discord est le centre des annonces, campagnes, squads, town halls et tickets support — le compte X officiel et les liens standx.com mènent à la même adresse.",
+      zh: "通过官方邀请链接加入 StandX Discord：discord.gg/standx。加入后完成服务器要求的验证（验证码、接受规则等），否则看不到频道。Discord 是公告、活动、小队、社区会议和支持工单的中心 —— 官方 X 账号和 standx.com 的链接都指向同一地址。",
+      ja: "StandX Discord には公式招待 discord.gg/standx から参加します。参加後、サーバーが求める認証（captcha、ルール同意など）を完了しないとチャンネルが見えません。Discord は告知・キャンペーン・スクワッド・タウンホール・サポートチケットの中心で、公式 X と standx.com のリンクも同じ先です。",
+    },
+  },
+  {
+    id: "discord-roles",
+    source: "/blog/articles/standx-recap-of-milestones-activities-and-ecosystem-evolution-p1",
+    tags: "discord discort rol role roles rütbe rank nasıl alınır how get earn kazan verification doğrulama 角色 ロール 取得 怎么",
+    a: {
+      tr: "StandX Discord'da roller birkaç yoldan gelir: (1) Growth Path — Engage Point biriktirip @SEED, @SPROUT, @FLOWER gibi katkı rollerine başvurmak; (2) kampanyalar — #StandX-Campaign'deki günlük görevler, davet ve etkinlikler; (3) token doğrulama — belirli token'ları cüzdanda tutup resmî bot/kanal ile kanıtlamak (ör. @ASTER); (4) işlem rolleri — @Active Trader, @Hardcore Trader gibi perps aktivitesine göre dağıtılanlar; (5) dönemsel etkinlik rolleri — duyuruda süre ve şart yazar. Rolleri elle vermezsin; sunucudaki ilgili kanal, bot veya başvuru adımlarını takip et.",
+      en: "On StandX Discord, roles come through several paths: (1) Growth Path — earn Engage Points and apply for contribution roles like @SEED, @SPROUT, @FLOWER; (2) campaigns — daily missions, invites and events in #StandX-Campaign; (3) token verification — hold specific tokens in your wallet and prove it via the official bot/channel (e.g. @ASTER); (4) trading roles — @Active Trader, @Hardcore Trader and similar, distributed from perps activity; (5) time-limited event roles — terms and deadlines are in the announcement. You do not assign roles yourself; follow the relevant channel, bot or application steps in the server.",
+      fr: "Sur le Discord StandX, les rôles passent par plusieurs voies : (1) Growth Path — accumuler des Engage Points et postuler pour @SEED, @SPROUT, @FLOWER ; (2) campagnes — missions quotidiennes, invitations et événements dans #StandX-Campaign ; (3) vérification token — détenir certains tokens et le prouver via le bot/canal officiel (ex. @ASTER) ; (4) rôles trading — @Active Trader, @Hardcore Trader selon l'activité perps ; (5) rôles d'événement limités — conditions et dates dans l'annonce. Tu ne t'attribues pas les rôles toi-même ; suis le salon, le bot ou la procédure indiquée.",
+      zh: "在 StandX Discord 上，角色通过几种途径获得：(1) Growth Path — 积累 Engage Point 并申请 @SEED、@SPROUT、@FLOWER 等贡献角色；(2) 活动 — #StandX-Campaign 中的每日任务、邀请和社区活动；(3) 代币验证 — 在钱包持有特定代币并通过官方 bot/频道验证（如 @ASTER）；(4) 交易角色 — 根据永续活动发放的 @Active Trader、@Hardcore Trader 等；(5) 限时活动角色 — 条件和截止时间在公告中说明。角色不能自行添加，需按服务器内对应频道、bot 或申请步骤操作。",
+      ja: "StandX Discord のロールは複数の経路があります。(1) Growth Path — Engage Point を貯め @SEED・@SPROUT・@FLOWER などの貢献ロールに応募；(2) キャンペーン — #StandX-Campaign のデイリーミッション・招待・イベント；(3) トークン認証 — 特定トークンをウォレットで保有し公式 bot/チャンネルで証明（例 @ASTER）；(4) 取引ロール — パープス活動に基づく @Active Trader・@Hardcore Trader など；(5) 期間限定イベントロール — 条件と期限は告知に記載。自分でロールは付けられず、該当チャンネル・bot・申請手順に従います。",
+    },
+  },
+  {
+    id: "discord-growth-path",
+    source: "/blog/articles/standx-recap-of-milestones-activities-and-ecosystem-evolution-p1",
+    tags: "engage point growth path seed sprout flower tier katkı contribution 成长 路径 积分 シード スプロウト",
+    a: {
+      tr: "StandX Growth Path, Discord'daki ilerleme sistemidir ve Engage Point ile ölçülür — sadece spam değil, gerçek katkı sayılır. 3.000 Engage Point biriktirince Tier 3 (@SEED) başvurusu açılır; oradan @SPROUT (Tier 2) ve @FLOWER (Tier 1) yoluna ilerlenebilir. StandX ID de bu yolculuğun parçası. Puanların ve başvuru adımlarının güncel detayı sunucudaki Growth Path / Engage kanallarında; kampanya dönemlerinde puan çarpanları duyurulabilir.",
+      en: "The StandX Growth Path is the Discord progression system measured by Engage Points — real contribution, not just spam. At 3,000 Engage Points you can apply for Tier 3 (@SEED), then progress toward @SPROUT (Tier 2) and @FLOWER (Tier 1). StandX ID is part of this journey. Current point totals and application steps live in the server's Growth Path / Engage channels; campaign periods may announce point multipliers.",
+      fr: "Le StandX Growth Path est le système de progression Discord mesuré en Engage Points — contribution réelle, pas du spam. À 3 000 Engage Points, tu peux postuler pour le Tier 3 (@SEED), puis viser @SPROUT (Tier 2) et @FLOWER (Tier 1). StandX ID fait partie de ce parcours. Les totaux et étapes de candidature sont dans les salons Growth Path / Engage ; les campagnes peuvent annoncer des multiplicateurs.",
+      zh: "StandX Growth Path 是 Discord 上的进阶体系，以 Engage Point 衡量 —— 看重真实贡献而非刷屏。积累 3,000 Engage Point 后可申请 Tier 3（@SEED），进而向 @SPROUT（Tier 2）和 @FLOWER（Tier 1）进阶。StandX ID 也是这条路径的一部分。最新积分和申请步骤在服务器的 Growth Path / Engage 频道；活动期间可能公布积分倍数。",
+      ja: "StandX Growth Path は Discord の進行システムで、Engage Point で測られます — スパムではなく実際の貢献が対象です。3,000 Engage Point で Tier 3（@SEED）に応募でき、@SPROUT（Tier 2）→ @FLOWER（Tier 1）へ進めます。StandX ID もこの旅の一部です。最新のポイントと申請手順は Growth Path / Engage チャンネルにあり、キャンペーン期間中は倍率が告知されることがあります。",
+    },
+  },
+  {
+    id: "discord-campaigns",
+    source: "/blog/articles/top-10-stablecoin-10-000-standers-stand-x-is-just-getting-started",
+    tags: "discord kampanya campaign mission görev daily günlük davet invite friend arkadaş puan point #standx-campaign 活动 任务",
+    a: {
+      tr: "Discord kampanyaları genelde #StandX-Campaign kanalında yürür. Günlük görevleri tamamla, arkadaş davet et, duyurulan etkinliklere katıl — karşılığında kampanya puanı ve bazen özel rol alırsın. Yoğun dönemlerde puanlar ikiye katlanabilir; duyuruları kaçırma. Kampanya şartları her seferinde farklı olabilir; aktif olan etkinliğin mesajındaki adımları takip et.",
+      en: "Discord campaigns usually run in #StandX-Campaign. Complete daily missions, invite friends and join announced events — you earn campaign points and sometimes exclusive roles. During busy periods points may be doubled; watch the announcements. Each campaign can have different rules; follow the steps in the active event message.",
+      fr: "Les campagnes Discord tournent surtout dans #StandX-Campaign. Complète les missions quotidiennes, invite des amis et participe aux événements annoncés — tu gagnes des points de campagne et parfois des rôles exclusifs. En période active les points peuvent être doublés ; suis les annonces. Chaque campagne a ses règles ; suis les étapes du message de l'événement en cours.",
+      zh: "Discord 活动通常在 #StandX-Campaign 频道进行。完成每日任务、邀请好友、参与公告活动 —— 可获得活动积分，有时还有专属角色。繁忙时期积分可能翻倍，留意公告。每次活动规则可能不同，按当前活动消息中的步骤操作。",
+      ja: "Discord キャンペーンは主に #StandX-Campaign で行われます。デイリーミッション達成、友達招待、告知イベント参加でキャンペーンポイントや限定ロールがもらえることがあります。繁忙期はポイント 2 倍になることも — 告知を確認してください。キャンペーンごとに条件が異なるので、進行中のイベントメッセージの手順に従います。",
+    },
+  },
+  {
+    id: "discord-support",
+    source: "/blog/articles/standx-recap-of-milestones-activities-and-ecosystem-evolution-p1",
+    tags: "discord destek support ticket bilet yardım help sorun problem şikayet squad town hall kanal channel 支持 工单",
+    a: {
+      tr: "StandX Discord'da duyurular, genel sohbet, squad'lar ve town hall'lar ayrı kanallarda. StandX veya DUSD ile ilgili teknik destek için sunucudaki bilet (ticket) sistemi var — doğrudan DM yerine ticket aç. Rol, puan veya kampanya sorunlarında önce ilgili duyuru kanalına ve Growth Path / Campaign kanallarına bak; orada bot komutları ve güncel adımlar yazar.",
+      en: "On StandX Discord, announcements, general chat, squads and town halls sit in separate channels. For StandX or DUSD technical support there is a ticket system in the server — open a ticket rather than DMing staff directly. For role, point or campaign issues, check the relevant announcement channel and the Growth Path / Campaign channels first; bot commands and current steps are posted there.",
+      fr: "Sur le Discord StandX, annonces, chat général, squads et town halls sont dans des salons séparés. Pour le support technique StandX ou DUSD, un système de tickets existe — ouvre un ticket plutôt qu'un MP direct. Pour rôles, points ou campagnes, consulte d'abord le salon d'annonces et les salons Growth Path / Campaign ; commandes bot et étapes y sont publiées.",
+      zh: "StandX Discord 上，公告、闲聊、小队和社区会议分在不同频道。StandX 或 DUSD 的技术支持使用服务器内的工单系统 —— 请开 ticket，不要直接私信工作人员。角色、积分或活动问题，先查看相关公告频道和 Growth Path / Campaign 频道；bot 命令和最新步骤会发布在那里。",
+      ja: "StandX Discord では告知・雑談・スクワッド・タウンホールが別チャンネルに分かれています。StandX や DUSD の技術サポートはサーバー内のチケットシステムを使い — 直接 DM より ticket を開いてください。ロール・ポイント・キャンペーンの問題は、まず告知チャンネルと Growth Path / Campaign チャンネルを確認。bot コマンドと最新手順が掲載されています。",
+    },
+  },
+  {
+    id: "discord-token-roles",
+    source: "/blog/articles/standx-recap-of-milestones-activities-and-ecosystem-evolution-p1",
+    tags: "discord aster token holder cüzdan wallet verify bot doğrulama on-chain rol role 代币 验证 ウォレット",
+    a: {
+      tr: "Bazı Discord rolleri cüzdan doğrulamasıyla gelir — en bilinen örnek @ASTER rolü. Genel akış: StandX Discord'a katıl → ilgili kanala gir (ör. aster-holders) → resmî bot veya \"Let's go!\" benzeri bağlantıyla cüzdanını bağla → minimum token bakiyesini kanıtla → rol otomatik atanır. Minimum miktar ve süre her etkinlikte duyuruda yazar; süresi dolmuş etkinliklerde rol alınamaz. Cüzdanını asla resmî olmayan bir siteye bağlama.",
+      en: "Some Discord roles come through wallet verification — the best-known example is @ASTER. The usual flow: join StandX Discord → enter the relevant channel (e.g. aster-holders) → connect your wallet via the official bot or a \"Let's go!\" style link → prove the minimum token balance → the role is assigned automatically. Minimum amount and deadline are stated in each event announcement; expired events no longer grant the role. Never connect your wallet to an unofficial site.",
+      fr: "Certains rôles Discord passent par une vérification de portefeuille — l'exemple le plus connu est @ASTER. Flux habituel : rejoindre le Discord StandX → entrer dans le salon concerné (ex. aster-holders) → connecter le wallet via le bot officiel ou un lien type « Let's go! » → prouver le solde minimum → le rôle est attribué. Montant minimum et deadline sont dans l'annonce ; les événements expirés ne donnent plus le rôle. Ne connecte jamais ton wallet à un site non officiel.",
+      zh: "部分 Discord 角色通过钱包验证获得 —— 最知名的例子是 @ASTER。一般流程：加入 StandX Discord → 进入对应频道（如 aster-holders）→ 通过官方 bot 或 \"Let's go!\" 类链接连接钱包 → 证明最低代币余额 → 角色自动发放。最低数量和截止时间在每次活动公告中说明；过期活动无法再获得角色。切勿将钱包连接到非官方网站。",
+      ja: "一部の Discord ロールはウォレット認証で付与されます — 代表例が @ASTER です。一般的な流れ：StandX Discord に参加 → 該当チャンネル（例 aster-holders）へ → 公式 bot または「Let's go!」系リンクでウォレット接続 → 最低トークン残高を証明 → ロール自動付与。最低量と期限は各イベント告知に記載。期限切れイベントでは取得不可。非公式サイトにウォレットを接続しないでください。",
+    },
+  },
 ];
 
 /** Suggested questions shown under the assistant, per language. */
 export const SUGGESTIONS = {
-  tr: ["DUSD getirisi nereden geliyor?", "BTC kaç?", "SIP-5 nedir?", "Ethereum nedir?", "Likidasyon nasıl çalışır?"],
-  en: ["Where does DUSD yield come from?", "What's BTC doing?", "What is SIP-5?", "What is Ethereum?", "How does liquidation work?"],
-  fr: ["D'où vient le rendement DUSD ?", "C’est combien BTC ?", "Qu’est-ce que SIP-5 ?", "C’est quoi Ethereum ?", "Comment marche la liquidation ?"],
-  zh: ["DUSD 的收益从哪来？", "BTC 现在多少？", "SIP-5 是什么？", "以太坊是什么？", "清算怎么运作？"],
-  ja: ["DUSD の利回りはどこから？", "BTC はいくら？", "SIP-5 とは？", "イーサリアムとは？", "清算はどう動く？"],
+  tr: ["DUSD getirisi nereden geliyor?", "Discord'da rol nasıl alınır?", "BTC kaç?", "SIP-5 nedir?", "Likidasyon nasıl çalışır?"],
+  en: ["Where does DUSD yield come from?", "How do I get a Discord role?", "What's BTC doing?", "What is SIP-5?", "How does liquidation work?"],
+  fr: ["D'où vient le rendement DUSD ?", "Comment obtenir un rôle Discord ?", "C’est combien BTC ?", "Qu’est-ce que SIP-5 ?", "Comment marche la liquidation ?"],
+  zh: ["DUSD 的收益从哪来？", "Discord 角色怎么获得？", "BTC 现在多少？", "SIP-5 是什么？", "清算怎么运作？"],
+  ja: ["DUSD の利回りはどこから？", "Discord ロールの取り方は？", "BTC はいくら？", "SIP-5 とは？", "清算はどう動く？"],
 };
