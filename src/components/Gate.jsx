@@ -43,11 +43,12 @@ export default function Gate({ onEnter }) {
             <i className="holoScan" />
             <i className="holoSweep" />
           </span>
+          {opening && <span className="gateBubble">{meta.gateWelcome || meta.welcome}</span>}
           <span className="gatePad" aria-hidden="true" />
         </div>
         <img className="gateMark" src={MARK} alt="" />
-        <h1 className="gateHello">{meta.welcome}</h1>
-        <p className="gateAsk">{t.gateAsk}</p>
+        <h1 className="gateHello">{opening ? meta.gateWelcome || meta.welcome : meta.welcome}</h1>
+        {!opening && <p className="gateAsk">{t.gateAsk}</p>}
         <div className="gateLangs">
           {LANGS.map((l) => (
             <button

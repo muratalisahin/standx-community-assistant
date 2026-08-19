@@ -131,7 +131,7 @@ function speakNow(kind, langId = detectLang()) {
   const text =
     kind === "listen"
       ? lang.listen || lang.greet
-      : `${lang.welcome || lang.hello}. ${lang.greet || lang.hello}`;
+      : lang.gateWelcome || lang.welcome || lang.greet || lang.hello;
   unlockAudio();
   playClip(lang.id, kind, text);
 }

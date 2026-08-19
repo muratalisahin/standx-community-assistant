@@ -1,11 +1,11 @@
 export const LANG_KEY = "standx-hub-lang";
 
 export const LANGS = [
-  { id: "tr", label: "Türkçe", short: "TR", locale: "tr-TR", hello: "Merhaba, hoş geldin", greet: "Hoş geldiniz, bir sorunuz var mı?", listen: "Buyrun, sizi dinliyorum", welcome: "StandX'e hoş geldiniz" },
-  { id: "en", label: "English", short: "EN", locale: "en-US", hello: "Hello, welcome", greet: "Welcome, do you have a question?", listen: "Come in, I'm listening", welcome: "Welcome to StandX" },
-  { id: "fr", label: "Français", short: "FR", locale: "fr-FR", hello: "Bonjour, bienvenue", greet: "Bienvenue, avez-vous une question ?", listen: "Je t'en prie, je t'écoute", welcome: "Bienvenue sur StandX" },
-  { id: "zh", label: "中文", short: "中", locale: "zh-CN", hello: "你好，欢迎", greet: "欢迎，您有问题吗？", listen: "请讲，我在听", welcome: "欢迎来到 StandX" },
-  { id: "ja", label: "日本語", short: "日", locale: "ja-JP", hello: "こんにちは、ようこそ", greet: "ようこそ、ご質問はありますか？", listen: "どうぞ、伺っています", welcome: "StandX へようこそ" },
+  { id: "tr", label: "Türkçe", short: "TR", locale: "tr-TR", hello: "Merhaba, hoş geldin", greet: "Hoş geldiniz, bir sorunuz var mı?", listen: "Buyrun, sizi dinliyorum", welcome: "StandX'e hoş geldiniz", gateWelcome: "StandX asistanına hoş geldiniz" },
+  { id: "en", label: "English", short: "EN", locale: "en-US", hello: "Hello, welcome", greet: "Welcome, do you have a question?", listen: "Come in, I'm listening", welcome: "Welcome to StandX", gateWelcome: "Welcome to the StandX assistant" },
+  { id: "fr", label: "Français", short: "FR", locale: "fr-FR", hello: "Bonjour, bienvenue", greet: "Bienvenue, avez-vous une question ?", listen: "Je t'en prie, je t'écoute", welcome: "Bienvenue sur StandX", gateWelcome: "Bienvenue sur l'assistant StandX" },
+  { id: "zh", label: "中文", short: "中", locale: "zh-CN", hello: "你好，欢迎", greet: "欢迎，您有问题吗？", listen: "请讲，我在听", welcome: "欢迎来到 StandX", gateWelcome: "欢迎使用 StandX 助手" },
+  { id: "ja", label: "日本語", short: "日", locale: "ja-JP", hello: "こんにちは、ようこそ", greet: "ようこそ、ご質問はありますか？", listen: "どうぞ、伺っています", welcome: "StandX へようこそ", gateWelcome: "StandX アシスタントへようこそ" },
 ];
 
 export const COPY = {
