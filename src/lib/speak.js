@@ -75,6 +75,15 @@ export function unlockAudio() {
   }
 }
 
+export function cancelSpeech() {
+  if (typeof window === "undefined") return;
+  try {
+    window.speechSynthesis?.cancel?.();
+  } catch {
+    /* ignore */
+  }
+}
+
 function speakBrowser(text, locale) {
   const synth = window.speechSynthesis;
   if (!synth) return false;
@@ -138,6 +147,20 @@ function speakNow(kind, langId = detectLang()) {
 
 export function speakText(text, locale = "en-US") {
   speakBrowser(text, locale);
+}
+
+/** Live tape. Skips when the ask dock is open, the tab is hidden, or motion is reduced. */
+export function speakRadio(text, locale = "en-US") {
+  if (typeof window === "undefined") return false;
+  if (document.hidden) return false;
+  if (document.body.classList.contains("dock-open")) return false;
+  if (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) return false;
+  const line = String(text || "").trim();
+  if (!line) return false;
+  unlockAudio();
+  cancelSpeech();
+  window.setTimeout(() => speakBrowser(line, locale), 50);
+  return true;
 }
 
 export function speakGreet(langId = detectLang()) {

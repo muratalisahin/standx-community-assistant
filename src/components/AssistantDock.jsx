@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import Assistant from "./Assistant.jsx";
 import Stander from "./Stander.jsx";
 import { useLang } from "../lib/Lang.jsx";
-import { speakListen } from "../lib/speak.js";
+import { cancelSpeech, speakListen } from "../lib/speak.js";
 import { detectLang } from "../lib/i18n.js";
 
 export function openAsk() {
@@ -23,7 +23,10 @@ export default function AssistantDock() {
   const [seed, setSeed] = useState("");
   const [seedTick, setSeedTick] = useState(0);
 
-  const openChat = useCallback(() => setOpen(true), []);
+  const openChat = useCallback(() => {
+    cancelSpeech();
+    setOpen(true);
+  }, []);
 
   useEffect(() => {
     const onOpen = () => openChat();

@@ -86,6 +86,10 @@ export const COPY = {
     backTop: "Yukarı",
     footerBy: "muratali_21764 tarafından inşa edilmiştir",
     gateAsk: "Hangi dilde istiyorsun?",
+    radioOnAir: "CANLI BANT",
+    radioWait: "Stander defteri dinliyor…",
+    radioMute: "Sessiz",
+    radioUnmute: "Ses aç",
   },
   en: {
     dir: "ltr",
@@ -164,6 +168,10 @@ export const COPY = {
     backTop: "Top",
     footerBy: "muratali_21764 tarafından inşa edilmiştir",
     gateAsk: "Which language do you want?",
+    radioOnAir: "LIVE TAPE",
+    radioWait: "Stander is listening to the book…",
+    radioMute: "Mute",
+    radioUnmute: "Unmute",
   },
   fr: {
     dir: "ltr",
@@ -242,6 +250,10 @@ export const COPY = {
     backTop: "Haut",
     footerBy: "muratali_21764 tarafından inşa edilmiştir",
     gateAsk: "Dans quelle langue veux-tu ?",
+    radioOnAir: "BANDE LIVE",
+    radioWait: "Stander écoute le carnet…",
+    radioMute: "Muet",
+    radioUnmute: "Son",
   },
   zh: {
     dir: "ltr",
@@ -319,6 +331,10 @@ export const COPY = {
     backTop: "顶部",
     footerBy: "muratali_21764 tarafından inşa edilmiştir",
     gateAsk: "你想用哪种语言？",
+    radioOnAir: "直播带",
+    radioWait: "Stander 正在听订单簿…",
+    radioMute: "静音",
+    radioUnmute: "开声",
   },
   ja: {
     dir: "ltr",
@@ -397,6 +413,10 @@ export const COPY = {
     backTop: "上へ",
     footerBy: "muratali_21764 tarafından inşa edilmiştir",
     gateAsk: "どの言語にしますか？",
+    radioOnAir: "ライブテープ",
+    radioWait: "Stander が板を聞いています…",
+    radioMute: "ミュート",
+    radioUnmute: "音声オン",
   },
 };
 

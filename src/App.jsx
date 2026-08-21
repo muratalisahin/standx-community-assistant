@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Core3D from "./components/Core3D.jsx";
 import AssistantDock, { openAsk } from "./components/AssistantDock.jsx";
+import Radio from "./components/Radio.jsx";
 import CoinCard from "./components/CoinCard.jsx";
 import Gate from "./components/Gate.jsx";
 import LangBar from "./components/LangBar.jsx";
@@ -51,6 +52,7 @@ export default function App() {
     }
   });
   const [cardOn, setCardOn] = useState(false);
+  const [airLine, setAirLine] = useState("");
   const active = useActiveSection(SECTIONS);
   const shellRef = useRef(null);
 
@@ -213,6 +215,10 @@ export default function App() {
         </div>
       </div>
 
+      {entered && (
+        <Radio live={entered} overview={overview} book={book} selected={selected} onLine={setAirLine} />
+      )}
+
       <div className="pageBody">
       <div className="pageMain">
       <main>
@@ -268,7 +274,7 @@ export default function App() {
                 <i className="heroHoloSweep" />
               </span>
               <span className="heroHoloPad" aria-hidden="true" />
-              <span className="heroHoloBubble">{t.heroHelp}</span>
+              <span className="heroHoloBubble">{airLine || t.heroHelp}</span>
             </button>
           </div>
         </Section>
