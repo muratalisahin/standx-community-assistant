@@ -2,7 +2,9 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#040806" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <title>STANDX: THE MACHINE</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Instrument+Serif:ital@0;1&family=Syne:wght@600;800&display=swap" rel="stylesheet" />
@@ -14,7 +16,10 @@
       --green: #3dff9a;
       --line: #1c3a2c;
     }
-    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    .playbar { display: none; gap: 8px; margin-top: 10px; }
+    .playbar .act, .playbar .go { flex: 1; justify-content: center; }
     html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--ink); font-family: Syne, system-ui, sans-serif; }
     body {
       background:
@@ -289,11 +294,46 @@
     .museum a.card:hover { color: var(--green); }
     footer { margin-top: 18px; color: var(--dim); font-size: 12px; font-family: system-ui, sans-serif; }
 
+    @media (hover: none) {
+      .chamber:hover .leaf { transform: none; }
+    }
     @media (max-width: 860px) {
+      .wrap { padding: 12px 12px max(28px, env(safe-area-inset-bottom)); }
+      header { flex-direction: column; align-items: stretch; gap: 12px; }
+      .brand { gap: 10px; }
+      .brand .mark { width: 40px; height: 40px; }
+      h1 { font-size: clamp(28px, 11vw, 44px); }
+      .lead { font-size: 15px; max-width: none; }
+      .top { align-items: stretch; width: 100%; }
+      .langs { justify-content: flex-start; }
+      .langs button { min-width: 44px; min-height: 44px; }
+      .live { font-size: 11px; line-height: 1.35; }
       .board { grid-template-columns: 1fr; }
-      .scene { height: 420px; }
-      .chamber strong { font-size: 11px; }
-      .stander { width: 132px; height: 172px; }
+      .scene {
+        height: min(52dvh, 380px);
+        margin-top: 14px;
+        touch-action: manipulation;
+      }
+      .machine { gap: 4px; padding: 0 2%; top: 4%; bottom: 34%; }
+      .chamber { min-width: 0; max-width: none; }
+      .leaf b { font-size: 8px; letter-spacing: 0.04em; padding: 6px 3px 0; }
+      .leaf strong { font-size: 9px; padding: 2px 3px 0; }
+      .plaque { font-size: 8px; letter-spacing: 0; margin-top: 4px; }
+      .handle, .hinge { display: none; }
+      .stander {
+        width: 78px; height: 102px; bottom: 10%;
+        pointer-events: none;
+      }
+      .hud { left: 8px; right: 8px; bottom: 8px; font-size: 13px; min-height: 0; }
+      .panel { padding: 16px; }
+      .panel h2 { font-size: 26px; }
+      .playbar { display: flex; }
+      .museum .row { display: none; }
+    }
+    @media (max-width: 420px) {
+      .scene { height: min(48dvh, 340px); }
+      .leaf strong { display: none; }
+      .window { top: 40%; height: 16%; }
     }
     @media (prefers-reduced-motion: reduce) {
       .stander .scan, .stander .glitch, .dot, .chamber.on .window { animation: none !important; }
@@ -332,6 +372,10 @@
       </div>
       <div class="hud" id="hud"></div>
     </div>
+    <div class="playbar">
+      <button class="act" type="button" data-trace data-i="trace">TRACE A TRADE</button>
+      <a class="go ghost" href="https://docs.standx.com/docs/about-standx" target="_blank" rel="noopener" data-i="docs">DOCS</a>
+    </div>
 
     <div class="board">
       <article class="panel" id="panel"></article>
@@ -344,7 +388,7 @@
         <a class="card" href="https://standx-community-assistant.vercel.app" target="_blank" rel="noopener">Community Assistant <small data-i="hub"></small></a>
         <a class="card" href="https://stander-oracle.vercel.app" target="_blank" rel="noopener">Oracle / Film <small data-i="oracle"></small></a>
         <div class="row">
-          <button class="act" type="button" id="trace" data-i="trace">TRACE A TRADE</button>
+          <button class="act" type="button" data-trace data-i="trace">TRACE A TRADE</button>
           <a class="go ghost" href="https://docs.standx.com/docs/about-standx" target="_blank" rel="noopener" data-i="docs">DOCS</a>
         </div>
       </aside>
@@ -729,6 +773,8 @@
     world.add(mascot);
 
     function sizeCanvas() {
+      const mobile = window.matchMedia("(max-width: 860px)").matches;
+      renderer.setPixelRatio(Math.min(mobile ? 1.4 : 2, window.devicePixelRatio || 1));
       const w = standerHost.clientWidth || 176;
       const h = standerHost.clientHeight || 228;
       renderer.setSize(w, h, false);
@@ -738,6 +784,7 @@
     }
     sizeCanvas();
     window.addEventListener("resize", sizeCanvas);
+    window.visualViewport?.addEventListener("resize", sizeCanvas);
 
     let drag = false;
     let lastX = 0;
@@ -817,7 +864,7 @@
         if (traceTimer) { clearInterval(traceTimer); traceTimer = null; }
         tracing = false;
         scene.classList.remove("tracing");
-        document.getElementById("trace").disabled = false;
+        setTraceBusy(false);
         select(s.id);
       });
       machine.appendChild(btn);
@@ -877,8 +924,19 @@
     });
 
     function doorLeft(idx) {
-      const n = Math.max(1, BASE.length - 1);
-      return 4 + (idx / n) * 74 + "%";
+      const doors = document.querySelectorAll(".chamber");
+      const door = doors[idx];
+      if (!door) return "4%";
+      const sceneRect = scene.getBoundingClientRect();
+      const r = door.getBoundingClientRect();
+      const w = standerHost.offsetWidth || 80;
+      const x = r.left - sceneRect.left + r.width / 2 - w / 2;
+      const max = Math.max(0, sceneRect.width - w);
+      return Math.min(max, Math.max(0, x)) + "px";
+    }
+
+    function setTraceBusy(on) {
+      document.querySelectorAll("[data-trace]").forEach((b) => { b.disabled = on; });
     }
 
     let transitLock = false;
@@ -969,12 +1027,12 @@
     applyLang();
     select("dusd");
 
-    document.getElementById("trace").addEventListener("click", () => {
+    document.querySelectorAll("[data-trace]").forEach((btn) => {
+      btn.addEventListener("click", () => {
       if (traceTimer) clearInterval(traceTimer);
       tracing = true;
       scene.classList.add("tracing");
-      const btn = document.getElementById("trace");
-      btn.disabled = true;
+      setTraceBusy(true);
       const order = BASE.map((s) => s.id);
       let i = 0;
       select(order[0]);
@@ -984,13 +1042,14 @@
           clearInterval(traceTimer);
           traceTimer = null;
           tracing = false;
-          btn.disabled = false;
+          setTraceBusy(false);
           window.setTimeout(() => scene.classList.remove("tracing"), 1600);
           select(order[order.length - 1], false);
           return;
         }
         select(order[i]);
       }, 2500);
+      });
     });
 
     fetch("https://perps.standx.com/api/query_market_overview")
