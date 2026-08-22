@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>STANDX: THE MACHINE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Instrument+Serif:ital@0;1&family=Syne:wght@600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #040806;
+      --ink: #e8f6ee;
+      --dim: #7d9588;
+      --green: #3dff9a;
+      --line: #1c3a2c;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--ink); font-family: Syne, system-ui, sans-serif; }
+    body {
+      background:
+        radial-gradient(900px 420px at 50% 110%, #0a3a2288, transparent 70%),
+        radial-gradient(700px 380px at 80% -10%, #06201866, transparent 55%),
+        #040806;
+    }
+    a { color: var(--green); }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 18px 18px 48px; }
+    header {
+      display: flex; align-items: end; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .brand { display: flex; align-items: start; gap: 14px; }
+    .brand .mark {
+      width: 46px; height: 46px; border-radius: 12px; flex: none;
+      box-shadow: 0 0 0 1px #3dff9a33, 0 0 24px #3dff9a22;
+      background: #0a0a0a;
+    }
+    .brand .word { display: none; }
+    .kicker { font-family: "IBM Plex Mono", monospace; letter-spacing: 0.22em; font-size: 11px; color: var(--green); margin: 0 0 6px; }
+    h1 { font-family: "Instrument Serif", serif; font-weight: 400; font-size: clamp(34px, 6vw, 64px); margin: 0; line-height: 0.95; }
+    h1 em { font-style: italic; color: var(--green); }
+    .lead { max-width: 54ch; color: #cfe6d8; margin: 10px 0 0; line-height: 1.5; font-weight: 400; font-family: system-ui, sans-serif; }
+    .top { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+    .langs { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+    .langs button {
+      min-width: 36px; height: 32px; padding: 0 8px; border-radius: 8px;
+      border: 1px solid var(--line); background: transparent; color: var(--dim);
+      font-family: "IBM Plex Mono", monospace; font-size: 11px; cursor: pointer;
+    }
+    .langs button.on { color: #04140b; background: var(--green); border-color: var(--green); font-weight: 600; }
+    .live {
+      font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--dim);
+      border: 1px solid var(--line); border-radius: 999px; padding: 10px 14px;
+    }
+    .live b { color: var(--green); }
+
+    .scene {
+      position: relative;
+      margin-top: 28px;
+      height: min(62vh, 560px);
+      perspective: 1400px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(180deg, #08140fcc, #050a08);
+    }
+    .floor {
+      position: absolute; inset: 18% 6% 8%;
+      transform: rotateX(62deg);
+      background:
+        linear-gradient(#3dff9a14 1px, transparent 1px),
+        linear-gradient(90deg, #3dff9a14 1px, transparent 1px);
+      background-size: 42px 42px;
+      border: 1px solid #245c4088;
+      filter: drop-shadow(0 40px 40px #000a);
+    }
+    .machine {
+      position: absolute; left: 0; right: 0; top: 6%; bottom: 26%;
+      display: flex; align-items: stretch; justify-content: space-evenly;
+      padding: 0 4%;
+      gap: 12px;
+      transform-style: preserve-3d;
+      pointer-events: none;
+    }
+    .chamber {
+      position: relative; z-index: 2; flex: 1; max-width: 168px;
+      min-width: 88px; height: 100%;
+      cursor: pointer; border: 0; padding: 0;
+      background: transparent; color: inherit; font: inherit; text-align: left;
+      pointer-events: auto;
+      perspective: 900px;
+    }
+    .door {
+      display: block; height: calc(100% - 28px);
+      padding: 5px 4px 0;
+      background: linear-gradient(180deg, #2a4638, #102018);
+      border: 2px solid #4a7a5c;
+      border-bottom: 0;
+      border-radius: 6px 6px 0 0;
+      box-shadow: inset 0 0 0 1px #9fffdc22, 0 14px 24px #0008;
+    }
+    .leaf {
+      display: block; position: relative;
+      height: 100%;
+      transform-origin: left center;
+      background:
+        linear-gradient(90deg, #12201a 0 8px, transparent 8px),
+        linear-gradient(180deg, #3a5c4a 0%, #1a3228 45%, #122018 100%);
+      border: 1px solid #6a9a78;
+      border-radius: 2px 8px 2px 0;
+      box-shadow: inset -10px 0 16px #0005, inset 8px 0 10px #ffffff10;
+      transition: transform 0.4s cubic-bezier(.2,.8,.2,1);
+    }
+    .chamber:hover .leaf { transform: rotateY(-12deg); }
+    .chamber.on .leaf { transform: rotateY(-28deg); }
+    .chamber.on .door { border-color: var(--green); box-shadow: 0 0 22px #3dff9a33; }
+    .leaf b, .leaf strong {
+      position: relative; z-index: 2;
+      display: block; padding: 8px 10px 0;
+      text-shadow: 0 2px 6px #000;
+    }
+    .leaf b {
+      font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: 0.12em; color: var(--green);
+    }
+    .leaf strong { font-size: clamp(12px, 1.4vw, 16px); padding-top: 3px; color: #f2fff6; }
+    .plaque {
+      display: block; margin-top: 6px; text-align: center;
+      font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.08em;
+      color: var(--green);
+    }
+    .hud {
+      position: absolute; z-index: 6; left: 16px; right: 16px; bottom: 12px;
+      min-height: 52px; padding: 10px 14px;
+      border: 1px solid #3dff9a55; border-radius: 12px;
+      background: #04140be8; color: #e8f6ee;
+      font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.35;
+      opacity: 0; pointer-events: none; transform: translateY(8px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    .scene.tracing .hud { opacity: 1; transform: none; }
+    .hud b {
+      display: block; font-family: "IBM Plex Mono", monospace; font-size: 10px;
+      letter-spacing: 0.14em; color: var(--green); margin-bottom: 4px; font-weight: 600;
+    }
+    .panel .beat {
+      font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--green);
+      margin: 0 0 8px;
+    }
+    .pipe {
+      position: absolute; left: 7%; right: 7%; bottom: 20%; height: 4px;
+      background: linear-gradient(90deg, #3dff9a, #58b6ff, #ff77c8, #d4b84a, #3dff9a);
+      opacity: 0.55; box-shadow: 0 0 18px #3dff9a55;
+    }
+    .scene.tracing .pipe { opacity: 0.9; }
+    .hinge {
+      position: absolute; left: -3px; width: 7px; height: 14px;
+      background: linear-gradient(90deg, #6a7a70, #2a322e);
+      border-radius: 1px;
+      box-shadow: 0 1px 2px #000a;
+    }
+    .hinge.a { top: 16%; }
+    .hinge.b { top: 72%; }
+    .handle {
+      position: absolute; right: 10px; top: 46%; width: 8px; height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #c8d4cc, #5a6a62);
+      box-shadow: 1px 2px 4px #0008;
+    }
+    .window {
+      position: absolute; left: 22%; right: 22%; top: 32%; height: 20%;
+      border-radius: 3px;
+      background:
+        radial-gradient(circle at 30% 30%, #8dffbc55, #0d3a2288 70%),
+        linear-gradient(180deg, #1a3a2a, #07140e);
+      border: 2px solid #1a2c24;
+      box-shadow: inset 0 0 10px #3dff9a33;
+      z-index: 1;
+    }
+    .chamber.on .window { box-shadow: inset 0 0 16px #3dff9a88, 0 0 12px #3dff9a44; }
+
+    .chamber.in .leaf, .chamber.out .leaf { transform: rotateY(-76deg); }
+    .chamber.in .door, .chamber.out .door {
+      border-color: var(--green);
+      box-shadow: 0 0 36px #3dff9a55, inset 0 0 30px #3dff9a22;
+    }
+    .scene.tunnel::after {
+      content: "";
+      position: absolute; inset: 0; z-index: 4; pointer-events: none;
+      background:
+        linear-gradient(90deg, #3dff9a00, #3dff9a33 46%, #e8fff4aa 50%, #3dff9a33 54%, #3dff9a00),
+        radial-gradient(ellipse at 50% 55%, #04140bcc, #000d);
+      animation: tunnel 0.55s ease-in-out;
+    }
+    @keyframes tunnel {
+      0% { opacity: 0; }
+      40% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    .stander {
+      position: absolute; z-index: 5; width: 200px; height: 260px;
+      bottom: 4%; left: 5%;
+      cursor: grab;
+      transform-origin: 50% 70%;
+      transition: left 0.55s cubic-bezier(.22,.8,.2,1), transform 0.55s ease, opacity 0.4s ease;
+    }
+    .stander.enter {
+      transform: translateY(-32%) scale(0.08);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .stander.inside { opacity: 0; visibility: hidden; pointer-events: none; }
+    .stander.exit { animation: emerge 0.75s cubic-bezier(.12,.8,.2,1) both; }
+    @keyframes emerge {
+      0% { transform: translateY(-30%) scale(0.08); opacity: 0; }
+      65% { transform: translateY(4%) scale(1.06); opacity: 1; }
+      100% { transform: none; opacity: 1; }
+    }
+    .stander:active { cursor: grabbing; }
+    .stander canvas { width: 100%; height: 100%; display: block; filter: drop-shadow(0 8px 18px #000a) drop-shadow(0 0 12px #3dff9a44); }
+    .stander .scan { opacity: 0.28; }
+    .stander .beam { opacity: 0.45; }
+    .stander .halo {
+      position: absolute; left: 18%; right: 18%; bottom: 8px; height: 22px;
+      border-radius: 50%; border: 1px solid #3dff9a66;
+      box-shadow: 0 0 28px #3dff9a55, 0 0 60px #3dff9a22;
+      pointer-events: none;
+    }
+    .stander .scan {
+      position: absolute; inset: 6% 14% 10%;
+      background: repeating-linear-gradient(180deg, #9fffdc18 0 1px, transparent 1px 7px);
+      mix-blend-mode: screen; pointer-events: none; opacity: 0.55;
+      animation: scan 2.8s linear infinite;
+      mask-image: radial-gradient(ellipse at 50% 45%, #000 40%, transparent 75%);
+    }
+    .stander .beam {
+      position: absolute; left: 16%; right: 16%; bottom: 12px; height: 78%;
+      background: linear-gradient(180deg, #3dff9a00, #3dff9a18 55%, #3dff9a08);
+      clip-path: polygon(22% 0, 78% 0, 100% 100%, 0 100%);
+      pointer-events: none; mix-blend-mode: screen; opacity: 0.85;
+    }
+    .stander .glitch {
+      position: absolute; inset: 0; pointer-events: none;
+      animation: holoFlicker 3.6s steps(2) infinite;
+    }
+    @keyframes scan {
+      from { background-position: 0 0; }
+      to { background-position: 0 80px; }
+    }
+    @keyframes holoFlicker {
+      0%, 86%, 100% { opacity: 1; }
+      87% { opacity: 0.55; }
+      89% { opacity: 1; }
+      94% { opacity: 0.7; }
+    }
+
+    .dot {
+      position: absolute; z-index: 3; width: 10px; height: 10px; border-radius: 50%;
+      background: #fff; box-shadow: 0 0 12px var(--green); top: 51%; left: 7%;
+      offset-path: path("M 0 0 H 1100");
+      animation: flow 4.8s linear infinite;
+      opacity: 0;
+    }
+    .scene.tracing .dot { opacity: 1; }
+    .dot:nth-child(2) { animation-delay: 0.8s; }
+    .dot:nth-child(3) { animation-delay: 1.6s; }
+    .dot:nth-child(4) { animation-delay: 2.4s; }
+    @keyframes flow { 0% { offset-distance: 0%; } 100% { offset-distance: 100%; } }
+
+    .board { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 14px; margin-top: 16px; }
+    .panel, .museum {
+      border: 1px solid var(--line); border-radius: 18px; background: #07140ecc; padding: 20px 22px;
+    }
+    .panel h2 { font-family: "Instrument Serif", serif; font-size: 32px; font-weight: 400; margin: 0 0 8px; }
+    .panel p { margin: 0 0 12px; color: #cfe6d8; line-height: 1.55; font-family: system-ui, sans-serif; }
+    .facts { margin: 0; padding: 0; list-style: none; }
+    .facts li { padding: 8px 0; border-top: 1px solid #1c3a2c; font-size: 14px; line-height: 1.45; font-family: system-ui, sans-serif; }
+    .src { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.06em; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    button.act, .go {
+      min-height: 44px; padding: 0 16px; border-radius: 999px; border: 0;
+      background: var(--green); color: #04140b; font-weight: 800; cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center;
+    }
+    button.act:disabled { opacity: 0.45; cursor: wait; }
+    .museum h3 { margin: 0 0 10px; font-size: 13px; letter-spacing: 0.16em; color: var(--dim); font-family: "IBM Plex Mono", monospace; }
+    .museum a.card {
+      display: block; text-decoration: none; color: var(--ink);
+      padding: 10px 0; border-top: 1px solid #1c3a2c; font-size: 14px;
+    }
+    .museum a.card small { display: block; color: var(--dim); font-size: 12px; margin-top: 2px; }
+    .museum a.card:hover { color: var(--green); }
+    footer { margin-top: 18px; color: var(--dim); font-size: 12px; font-family: system-ui, sans-serif; }
+
+    @media (max-width: 860px) {
+      .board { grid-template-columns: 1fr; }
+      .scene { height: 420px; }
+      .chamber strong { font-size: 11px; }
+      .stander { width: 132px; height: 172px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .stander .scan, .stander .glitch, .dot, .chamber.on .window { animation: none !important; }
+      .stander, .leaf, .stander.exit { transition: none !important; animation: none !important; }
+      .chamber:hover .leaf, .chamber.on .leaf, .chamber.in .leaf, .chamber.out .leaf { transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <img class="mark" src="public/images/standx-mark.png" alt="StandX" />
+        <div>
+          <p class="kicker" data-i="kicker">STANDX BUILDER MUSEUM</p>
+          <h1>THE <em>MACHINE</em></h1>
+          <p class="lead" data-i="lead">Devasa bir StandX makinesi. DUSD girer, perps işler, likidite durur, kasalar test edilir, trader ve community çıkar. Parçaya dokun — o katmanın gerçek mantığını gör. Her iddia public data ve docs ile doğrulanır.</p>
+        </div>
+      </div>
+      <div class="top">
+        <div class="langs" id="langs" role="tablist" aria-label="Language"></div>
+        <div class="live" id="live">CANLI · public feed bekleniyor</div>
+      </div>
+    </header>
+
+    <div class="scene" id="scene">
+      <div class="floor"></div>
+      <div class="pipe"></div>
+      <i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i>
+      <div class="machine" id="machine"></div>
+      <div class="stander" id="stander" title="Sürükle — hologram Stander">
+        <span class="beam"></span>
+        <span class="halo"></span>
+        <span class="glitch"></span>
+        <span class="scan"></span>
+      </div>
+      <div class="hud" id="hud"></div>
+    </div>
+
+    <div class="board">
+      <article class="panel" id="panel"></article>
+      <aside class="museum">
+        <h3 data-i="museum">EVERYTHING CONNECTED</h3>
+        <a class="card" href="https://standx-raid.vercel.app" target="_blank" rel="noopener">Raid <small data-i="raid"></small></a>
+        <a class="card" href="https://standx-circuit.vercel.app" target="_blank" rel="noopener">Circuit <small data-i="circuit"></small></a>
+        <a class="card" href="https://standx-labirent.vercel.app/" target="_blank" rel="noopener">Labyrinth <small data-i="lab"></small></a>
+        <a class="card" href="https://standx-market-doctor.vercel.app" target="_blank" rel="noopener">Market Doctor <small data-i="doctor"></small></a>
+        <a class="card" href="https://standx-community-assistant.vercel.app" target="_blank" rel="noopener">Community Assistant <small data-i="hub"></small></a>
+        <a class="card" href="https://stander-oracle.vercel.app" target="_blank" rel="noopener">Oracle / Film <small data-i="oracle"></small></a>
+        <div class="row">
+          <button class="act" type="button" id="trace" data-i="trace">TRACE A TRADE</button>
+          <a class="go ghost" href="https://docs.standx.com/docs/about-standx" target="_blank" rel="noopener" data-i="docs">DOCS</a>
+        </div>
+      </aside>
+    </div>
+    <footer data-i="footer">Educational museum. Not financial advice. Not official StandX. Sources: docs.standx.com · standx.com/perps public market · github.com/standx-labs/stand_audit · x.com/StandX_Official</footer>
+  </div>
+
+  <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js" } }
+  </script>
+  <script type="module">
+    import * as THREE from "three";
+
+    const DOCS = {
+      about: "https://docs.standx.com/docs/about-standx",
+      dusd: "https://docs.standx.com/docs/about-standx",
+      perps: "https://docs.standx.com/docs/standx-perps-overview",
+      sip3: "https://docs.standx.com/sip/sip",
+      sip5: "https://docs.standx.com/blog/articles/sip-5-permissionless-listings-on-anything",
+      points: "https://docs.standx.com/docs/standx-earn/mainnet-campaigns",
+      audits: "https://github.com/standx-labs/stand_audit",
+      perpsUi: "https://standx.com/perps",
+      x: "https://x.com/StandX_Official",
+    };
+
+    const LANG_KEY = "standx-hub-lang";
+    const LANGS = [
+      { id: "tr", short: "TR" },
+      { id: "en", short: "EN" },
+      { id: "fr", short: "FR" },
+      { id: "zh", short: "中" },
+      { id: "ja", short: "日" },
+    ];
+    const BASE = [
+      { id: "dusd", tag: "01 IN", name: "DUSD", src: DOCS.about },
+      { id: "perps", tag: "02 ENGINE", name: "PERPS", src: DOCS.perps },
+      { id: "liq", tag: "03 DEPTH", name: "LIQUIDITY", src: DOCS.sip5 },
+      { id: "vaults", tag: "04 BUFFER", name: "VAULTS", src: DOCS.x },
+      { id: "out", tag: "05 OUT", name: "TRADER", src: DOCS.points },
+    ];
+    const COPY = {
+      tr: {
+        kicker: "STANDX BUILDER MUSEUM",
+        lead: "Devasa bir StandX makinesi. DUSD girer, perps işler, likidite durur, kasalar test edilir, trader ve community çıkar. Parçaya dokun — o katmanın gerçek mantığını gör. Her iddia public data ve docs ile doğrulanır.",
+        museum: "EVERYTHING CONNECTED",
+        raid: "Etkileşim · çok dilli community",
+        circuit: "SIP-1 → SIP-5’i gör",
+        lab: "SIP’leri oyna, öğren",
+        doctor: "Trade mantığını çöz",
+        hub: "61 sayfa docs, beş dil",
+        oracle: "Lambadan sor, perdeyi aç",
+        trace: "TRACE A TRADE",
+        docs: "DOCS",
+        source: "KAYNAK · doğrula →",
+        footer: "Eğitim müzesi. Yatırım tavsiyesi değil. Resmi StandX değil. Kaynak: docs.standx.com · standx.com/perps · github.com/standx-labs/stand_audit · x.com/StandX_Official",
+        drag: "Sürükle — hologram Stander",
+        liveWait: "PİYASA · standx.com/perps",
+        liveOk: "CANLI · <b>{n}</b> piyasa · 24s hacim proxy <b>{vol}</b> · public API",
+        liveFail: "Defter: <a href=\"{url}\" target=\"_blank\" rel=\"noopener\">standx.com/perps</a> · bu sekmede API yok",
+        stations: [
+          { title: "DUSD girer", body: "Makinenin yakıtı getiri taşıyan stablecoin. USDT/USDC ile 1:1 basılır, stake yok, getiri cüzdana düşer. Perps ücretinin bir kısmı SIP-3 ile her gün DUSD havuzuna akar — basılan token değil, gerçek gelir.", facts: ["Minimum mint 5 dolar, mint ücreti yok.", "Kaynak: spot stake (ETH/SOL/BNB) + funding + perps fee share.", "Resmi anlatımda APY bandı %8–10+ dolaşır; taze rakam standx.com’dadır."] },
+          { title: "Perps işler", body: "DUSD hem fiyat hem teminat. Para önce Cash Wallet’a düşer; işlem ve holder puanı yalnız Perps Wallet’ta. Mark fiyat üç girdinin medyanı; funding long/short arasında, StandX ücreti değil.", facts: ["Maker %0,01 / taker %0,04.", "11 piyasa: kripto, altın, gümüş, petrol, hisse.", "Mainnet: 24 Kasım 2025 · BNB Chain + Solana."] },
+          { title: "Likidite durur", body: "Defter ince açılmaz. SIP-5 öncesi birkaç piyasayı gerçekten derin tutmak: BTC’de 10 bps içinde 800+ BTC derinlik tutulmuş. Maker puanı gerçekleşmeyen limit için de işler — 3 saniye defterde dur.", facts: ["İlk perps DEX: fill olmayan limite puan.", "SIP-5A: community maker yield / uptime.", "Hedef çarpma: 1.000.000 universal market."] },
+          { title: "Kasalar test edilir", body: "SIP-5B community vaults. X’te (13 Ağu): Challenge başladı, kasalar hâlâ testte. Yatırmak başka bir trader’a kontrol vermek demek. Yönetici yarışı: 300 DUSD yatır, 3000 DUSD ödül, 30 kişi, 4 hafta.", facts: ["Strategy / Reward / Shield katmanları.", "Yeşil piyasa + yüksek vol = canlı stres testi.", "Altı denetim açık: WatchPug + RigSec."] },
+          { title: "Community çıkar", body: "Çıktı: trader, maker, holder, referral. İki yarılanma bitti (son: 10 Ağu 2026). Discord Growth Path ayrı: SEED → SPROUT → FLOWER. Makine kâr basmaz; hak, puan ve defter bırakır.", facts: ["Holder: Perps/Vault DUSD başına günde 0,6.", "Network Yield: davet ücretinin %20’sine kadar.", "Doğrula: points sayfası + docs, ezber değil."] },
+        ],
+      },
+      en: {
+        kicker: "STANDX BUILDER MUSEUM",
+        lead: "A giant StandX machine. DUSD goes in, perps run, liquidity holds, vaults are tested, trader and community come out. Touch a part — see that layer’s real mechanics. Every claim is checked against public data and docs.",
+        museum: "EVERYTHING CONNECTED",
+        raid: "Engagement · multilingual community",
+        circuit: "See SIP-1 → SIP-5",
+        lab: "Play the SIPs, learn them",
+        doctor: "Unpack how a trade works",
+        hub: "61 pages of docs, five languages",
+        oracle: "Ask the lamp, open the curtain",
+        trace: "TRACE A TRADE",
+        docs: "DOCS",
+        source: "SOURCE · verify →",
+        footer: "Educational museum. Not financial advice. Not official StandX. Sources: docs.standx.com · standx.com/perps · github.com/standx-labs/stand_audit · x.com/StandX_Official",
+        drag: "Drag — hologram Stander",
+        liveWait: "MARKET · standx.com/perps",
+        liveOk: "LIVE · <b>{n}</b> markets · 24h volume proxy <b>{vol}</b> · public API",
+        liveFail: "Book: <a href=\"{url}\" target=\"_blank\" rel=\"noopener\">standx.com/perps</a> · no API in this tab",
+        stations: [
+          { title: "DUSD goes in", body: "The machine’s fuel is a yield-bearing stablecoin. Minted 1:1 with USDT/USDC, no stake, yield hits the wallet. Part of perps fees flows daily into the DUSD pool via SIP-3 — real revenue, not printed tokens.", facts: ["Minimum mint $5, no mint fee.", "Sources: spot stake (ETH/SOL/BNB) + funding + perps fee share.", "Official talk uses an ~8–10%+ APY band; live figure is on standx.com."] },
+          { title: "Perps run", body: "DUSD is both price and collateral. Funds land in Cash Wallet first; trade and holder points only in Perps Wallet. Mark is the median of three inputs; funding is between longs and shorts — not a StandX fee.", facts: ["Maker 0.01% / taker 0.04%.", "11 markets: crypto, gold, silver, oil, equities.", "Mainnet: 24 Nov 2025 · BNB Chain + Solana."] },
+          { title: "Liquidity holds", body: "The book is not opened thin. Before SIP-5, a few markets were kept truly deep: 800+ BTC inside 10 bps. Maker points also accrue on unfilled limits that rest 3 seconds.", facts: ["First perps DEX: points on unfilled limits.", "SIP-5A: community maker yield / uptime.", "Ambition: 1,000,000 universal markets."] },
+          { title: "Vaults on test", body: "SIP-5B community vaults. On X (13 Aug): the Challenge started; vaults are still in test. Depositing means giving another trader control. Manager race: 300 DUSD in, 3000 DUSD prize, 30 people, 4 weeks.", facts: ["Strategy / Reward / Shield layers.", "Green market + high vol = live stress test.", "Six audits public: WatchPug + RigSec."] },
+          { title: "Community out", body: "Output: trader, maker, holder, referral. Two halvings done (last: 10 Aug 2026). Discord Growth Path is separate: SEED → SPROUT → FLOWER. The machine does not print profit; it leaves rights, points, and a book.", facts: ["Holder: 0.6 per Perps/Vault DUSD per day.", "Network Yield: up to 20% of invite fees.", "Verify on the points page + docs — don’t memorize."] },
+        ],
+      },
+      fr: {
+        kicker: "STANDX BUILDER MUSEUM",
+        lead: "Une machine StandX immense. Le DUSD entre, les perps tournent, la liquidité tient, les vaults sont testés, trader et community sortent. Touche une pièce — vois la vraie mécanique. Chaque affirmation est vérifiée sur les données publiques et les docs.",
+        museum: "TOUT EST LIÉ",
+        raid: "Engagement · communauté multilingue",
+        circuit: "Voir SIP-1 → SIP-5",
+        lab: "Joue les SIP, apprends-les",
+        doctor: "Comprendre un trade",
+        hub: "61 pages de docs, cinq langues",
+        oracle: "Demande à la lampe, ouvre le rideau",
+        trace: "TRACE A TRADE",
+        docs: "DOCS",
+        source: "SOURCE · vérifier →",
+        footer: "Musée éducatif. Pas un conseil d’investissement. Pas officiel StandX. Sources : docs.standx.com · standx.com/perps · github.com/standx-labs/stand_audit · x.com/StandX_Official",
+        drag: "Glisser — Stander hologramme",
+        liveWait: "MARCHÉ · standx.com/perps",
+        liveOk: "LIVE · <b>{n}</b> marchés · volume 24h proxy <b>{vol}</b> · API publique",
+        liveFail: "Carnet : <a href=\"{url}\" target=\"_blank\" rel=\"noopener\">standx.com/perps</a> · pas d’API ici",
+        stations: [
+          { title: "Le DUSD entre", body: "Le carburant est un stablecoin à rendement. Mint 1:1 en USDT/USDC, pas de stake, le rendement tombe au wallet. Une part des frais perps rejoint chaque jour le pool DUSD via SIP-3 — vrai revenu, pas de token imprimé.", facts: ["Mint minimum 5 $, pas de frais de mint.", "Sources : stake spot (ETH/SOL/BNB) + funding + part des frais perps.", "Le discours officiel parle d’une bande ~8–10 %+ d’APY ; le chiffre frais est sur standx.com."] },
+          { title: "Les perps tournent", body: "Le DUSD est prix et collatéral. Les fonds arrivent d’abord au Cash Wallet ; points de trade et holder seulement dans le Perps Wallet. Le mark est la médiane de trois entrées ; le funding est entre longs et shorts — pas un frais StandX.", facts: ["Maker 0,01 % / taker 0,04 %.", "11 marchés : crypto, or, argent, pétrole, actions.", "Mainnet : 24 nov. 2025 · BNB Chain + Solana."] },
+          { title: "La liquidité tient", body: "Le carnet n’est pas ouvert trop fin. Avant SIP-5, quelques marchés étaient vraiment profonds : 800+ BTC dans 10 bps. Les points maker courent aussi sur les limites non exécutées restées 3 secondes.", facts: ["Premier perps DEX : points sur limite non fill.", "SIP-5A : yield / uptime maker community.", "Ambition : 1 000 000 de marchés universels."] },
+          { title: "Vaults en test", body: "SIP-5B community vaults. Sur X (13 août) : le Challenge a commencé ; les vaults sont encore en test. Déposer, c’est donner le contrôle à un autre trader. Course manager : 300 DUSD, prix 3000 DUSD, 30 personnes, 4 semaines.", facts: ["Couches Strategy / Reward / Shield.", "Marché vert + vol élevée = stress test live.", "Six audits publics : WatchPug + RigSec."] },
+          { title: "La community sort", body: "Sortie : trader, maker, holder, referral. Deux halvings faits (dernier : 10 août 2026). Discord Growth Path à part : SEED → SPROUT → FLOWER. La machine n’imprime pas le profit ; elle laisse des droits, des points et un carnet.", facts: ["Holder : 0,6 par DUSD Perps/Vault et par jour.", "Network Yield : jusqu’à 20 % des frais d’invitation.", "Vérifier la page points + docs — ne pas mémoriser."] },
+        ],
+      },
+      zh: {
+        kicker: "STANDX BUILDER MUSEUM",
+        lead: "一台巨大的 StandX 机器。DUSD 进入，永续运转，流动性站住，金库接受测试，交易者与社区走出。点一层，看那一层的真实机制。每项说法都对照公开数据和文档。",
+        museum: "全部相连",
+        raid: "互动 · 多语社区",
+        circuit: "看 SIP-1 → SIP-5",
+        lab: "玩 SIP，学会 SIP",
+        doctor: "拆开一笔交易",
+        hub: "61 页文档，五种语言",
+        oracle: "问神灯，拉开帷幕",
+        trace: "TRACE A TRADE",
+        docs: "文档",
+        source: "来源 · 核对 →",
+        footer: "教育向博物馆。非投资建议。非官方 StandX。来源：docs.standx.com · standx.com/perps · github.com/standx-labs/stand_audit · x.com/StandX_Official",
+        drag: "拖动 — 全息 Stander",
+        liveWait: "行情 · standx.com/perps",
+        liveOk: "实时 · <b>{n}</b> 个市场 · 24h 成交量代理 <b>{vol}</b> · 公开 API",
+        liveFail: "订单簿：<a href=\"{url}\" target=\"_blank\" rel=\"noopener\">standx.com/perps</a> · 此标签页无 API",
+        stations: [
+          { title: "DUSD 进入", body: "机器的燃料是带收益的稳定币。用 USDT/USDC 1:1 铸造，无需质押，收益进钱包。永续手续费的一部分经 SIP-3 每日流入 DUSD 池——是真实收入，不是增发代币。", facts: ["最低铸造 5 美元，无铸造费。", "来源：现货质押（ETH/SOL/BNB）+ funding + 永续手续费分成。", "官方口径常见约 8–10%+ APY 区间；最新数字在 standx.com。"] },
+          { title: "永续运转", body: "DUSD 既是计价也是保证金。资金先到 Cash Wallet；交易与 holder 积分只在 Perps Wallet。Mark 是三个输入的中位数；funding 在多空之间，不是 StandX 收费。", facts: ["Maker 0.01% / taker 0.04%。", "11 个市场：加密、金、银、石油、股票。", "主网：2025年11月24日 · BNB Chain + Solana。"] },
+          { title: "流动性站住", body: "订单簿不会开得过薄。SIP-5 之前，少数市场被真正做深：10 bps 内 800+ BTC。未成交限价单在簿上停留 3 秒也可拿 maker 积分。", facts: ["首个给未成交限价计积分的永续 DEX。", "SIP-5A：社区 maker 收益 / 在线率。", "目标：1,000,000 个通用市场。"] },
+          { title: "金库测试中", body: "SIP-5B 社区金库。X（8月13日）：Challenge 已开始，金库仍在测试。存入等于把控制权交给另一位交易者。管理人竞赛：投入 300 DUSD，奖池 3000 DUSD，30 人，4 周。", facts: ["Strategy / Reward / Shield 层。", "绿色行情 + 高波动 = 实时压力测试。", "六份审计公开：WatchPug + RigSec。"] },
+          { title: "社区走出", body: "产出：交易者、maker、holder、邀请。两次减半已完成（最近：2026年8月10日）。Discord Growth Path 另算：SEED → SPROUT → FLOWER。机器不印利润；留下的是权利、积分和订单簿。", facts: ["Holder：Perps/Vault 每 DUSD 每天 0.6。", "Network Yield：邀请手续费最高 20%。", "以积分页 + 文档核对，不要死记。"] },
+        ],
+      },
+      ja: {
+        kicker: "STANDX BUILDER MUSEUM",
+        lead: "巨大な StandX マシン。DUSD が入り、パーペチュアルが動き、流動性が持ちこたえる。ボールトは試験され、トレーダーとコミュニティが出てくる。部品に触れて、その層の本物の仕組みを見る。主張は公開データと docs で照合する。",
+        museum: "すべてつながっている",
+        raid: "交流 · 多言語コミュニティ",
+        circuit: "SIP-1 → SIP-5 を見る",
+        lab: "SIP を遊んで学ぶ",
+        doctor: "トレードの仕組みを解く",
+        hub: "61ページの docs、5言語",
+        oracle: "ランプに聞く、幕を開ける",
+        trace: "TRACE A TRADE",
+        docs: "DOCS",
+        source: "ソース · 確認 →",
+        footer: "教育用ミュージアム。投資助言ではない。公式 StandX ではない。出典：docs.standx.com · standx.com/perps · github.com/standx-labs/stand_audit · x.com/StandX_Official",
+        drag: "ドラッグ — ホログラム Stander",
+        liveWait: "市場 · standx.com/perps",
+        liveOk: "LIVE · <b>{n}</b> 市場 · 24h 出来高プロキシ <b>{vol}</b> · 公開 API",
+        liveFail: "板：<a href=\"{url}\" target=\"_blank\" rel=\"noopener\">standx.com/perps</a> · このタブに API なし",
+        stations: [
+          { title: "DUSD が入る", body: "燃料は利回り付きステーブル。USDT/USDC で 1:1 ミント、ステークなし、利回りはウォレットへ。パーペチュアル手数料の一部は SIP-3 で毎日 DUSD プールへ——発行トークンではなく実収入。", facts: ["最低ミント 5 ドル、ミント手数料なし。", "源泉：スポットステーク（ETH/SOL/BNB）+ funding + パーペ手数料シェア。", "公式の話では APY 帯は約 8–10%+。最新は standx.com。"] },
+          { title: "パーペチュアルが動く", body: "DUSD は価格でも証拠金でもある。資金はまず Cash Wallet。取引と holder ポイントは Perps Wallet のみ。Mark は 3 入力の中央値。funding はロング/ショート間で、StandX の手数料ではない。", facts: ["Maker 0.01% / taker 0.04%。", "11 市場：暗号、金、銀、原油、株式。", "メインネット：2025年11月24日 · BNB Chain + Solana。"] },
+          { title: "流動性が持ちこたえる", body: "板を薄く開かない。SIP-5 前、少数市場を本当に深く保った：10 bps 内に 800+ BTC。未約定の指値も 3 秒板にいれば maker ポイント。", facts: ["未約定指値にもポイントを付ける初のパーペ DEX。", "SIP-5A：コミュニティ maker yield / uptime。", "目標：ユニバーサル市場 1,000,000。"] },
+          { title: "ボールトは試験中", body: "SIP-5B コミュニティボールト。X（8月13日）：Challenge 開始、ボールトはまだテスト。預けることは別トレーダーに制御を渡すこと。マネージャー競争：300 DUSD、賞 3000 DUSD、30人、4週間。", facts: ["Strategy / Reward / Shield 層。", "緑相場 + 高ボラ = ライブ負荷試験。", "監査 6 件公開：WatchPug + RigSec。"] },
+          { title: "コミュニティが出る", body: "出力：トレーダー、maker、holder、紹介。半減は 2 回完了（直近：2026年8月10日）。Discord Growth Path は別：SEED → SPROUT → FLOWER。マシンは利益を刷らない。権利、ポイント、板を残す。", facts: ["Holder：Perps/Vault DUSD あたり 1 日 0.6。", "Network Yield：招待手数料の最大 20%。", "points ページと docs で確認。暗記しない。"] },
+        ],
+      },
+    };
+
+    const BEATS = {
+      tr: [
+        { tag: "ÖRNEK İZ · 01 MINT", title: "100 USDT → DUSD", line: "Mint, Cash Wallet’a düşer. Stake yok, mint ücreti yok. Getiri cüzdana gelir — basılan token değil." },
+        { tag: "ÖRNEK İZ · 02 TRANSFER", title: "Cash → Perps Wallet", line: "İşlem ve holder puanı yalnız Perps Wallet’ta. BTC-USD açılır. Taker %0,04; mark üç girdinin medyanı." },
+        { tag: "ÖRNEK İZ · 03 BOOK", title: "Limit defterde durur", line: "3 saniye fill olmazsa bile maker puanı. Derinlik ince açılmaz — fill olursa gerçek defter işler." },
+        { tag: "ÖRNEK İZ · 04 VAULT", title: "Kasa zorunlu değil", line: "Yatırmak başka trader’a kontrol vermek. SIP-5B hâlâ testte. Bu izde kasa atlanır." },
+        { tag: "ÖRNEK İZ · 05 OUT", title: "Fee → DUSD havuzu", line: "SIP-3: perps ücretinin bir kısmı her gün havuza. Holder puanı yazılır. Makine kâr basmaz." },
+      ],
+      en: [
+        { tag: "SAMPLE TRACE · 01 MINT", title: "100 USDT → DUSD", line: "Mint lands in Cash Wallet. No stake, no mint fee. Yield hits the wallet — not printed tokens." },
+        { tag: "SAMPLE TRACE · 02 TRANSFER", title: "Cash → Perps Wallet", line: "Trade and holder points only in Perps Wallet. BTC-USD opens. Taker 0.04%; mark is the median of three inputs." },
+        { tag: "SAMPLE TRACE · 03 BOOK", title: "Limit rests on the book", line: "Unfilled for 3 seconds still earns maker points. The book is not opened thin — a fill is real depth." },
+        { tag: "SAMPLE TRACE · 04 VAULT", title: "Vault is optional", line: "Depositing hands control to another trader. SIP-5B is still in test. This trace skips the vault." },
+        { tag: "SAMPLE TRACE · 05 OUT", title: "Fee → DUSD pool", line: "SIP-3: part of perps fees hits the pool daily. Holder points are written. The machine does not print profit." },
+      ],
+      fr: [
+        { tag: "TRACE EXEMPLE · 01 MINT", title: "100 USDT → DUSD", line: "Le mint arrive au Cash Wallet. Pas de stake, pas de frais de mint. Le rendement tombe au wallet." },
+        { tag: "TRACE EXEMPLE · 02 TRANSFERT", title: "Cash → Perps Wallet", line: "Points de trade et holder seulement dans le Perps Wallet. BTC-USD s’ouvre. Taker 0,04 %." },
+        { tag: "TRACE EXEMPLE · 03 CARNET", title: "La limite reste au carnet", line: "3 secondes sans fill : points maker quand même. Un fill, c’est de la vraie profondeur." },
+        { tag: "TRACE EXEMPLE · 04 VAULT", title: "Vault facultatif", line: "Déposer, c’est donner le contrôle. SIP-5B encore en test. Cette trace saute le vault." },
+        { tag: "TRACE EXEMPLE · 05 OUT", title: "Frais → pool DUSD", line: "SIP-3 : une part des frais rejoint le pool chaque jour. Points holder. Pas de profit imprimé." },
+      ],
+      zh: [
+        { tag: "示例追踪 · 01 铸造", title: "100 USDT → DUSD", line: "铸造进入 Cash Wallet。无质押、无铸造费。收益进钱包，不是增发代币。" },
+        { tag: "示例追踪 · 02 划转", title: "Cash → Perps Wallet", line: "交易与 holder 积分只在 Perps Wallet。开 BTC-USD。Taker 0.04%。" },
+        { tag: "示例追踪 · 03 订单簿", title: "限价停在簿上", line: "3 秒未成交仍拿 maker 积分。成交才是真实深度。" },
+        { tag: "示例追踪 · 04 金库", title: "金库非必须", line: "存入等于交出控制权。SIP-5B 仍在测试。本追踪跳过金库。" },
+        { tag: "示例追踪 · 05 流出", title: "手续费 → DUSD 池", line: "SIP-3：永续手续费一部分每日入池。写入 holder 积分。机器不印利润。" },
+      ],
+      ja: [
+        { tag: "サンプル追跡 · 01 MINT", title: "100 USDT → DUSD", line: "ミントは Cash Wallet へ。ステークなし、ミント手数料なし。利回りはウォレットへ。" },
+        { tag: "サンプル追跡 · 02 移動", title: "Cash → Perps Wallet", line: "取引と holder ポイントは Perps Wallet のみ。BTC-USD を開く。Taker 0.04%。" },
+        { tag: "サンプル追跡 · 03 板", title: "指値が板に残る", line: "3秒未約定でも maker ポイント。約定すれば本物の深さ。" },
+        { tag: "サンプル追跡 · 04 VAULT", title: "ボールトは任意", line: "預けることは制御を渡すこと。SIP-5B は試験中。この追跡ではスキップ。" },
+        { tag: "サンプル追跡 · 05 OUT", title: "手数料 → DUSD プール", line: "SIP-3：パーペ手数料の一部が毎日プールへ。Holder ポイント。利益は刷らない。" },
+      ],
+    };
+
+    let lang = "tr";
+    try {
+      const saved = localStorage.getItem(LANG_KEY);
+      if (LANGS.some((l) => l.id === saved)) lang = saved;
+    } catch (_) {}
+
+    function stations() {
+      return BASE.map((b, i) => ({ ...b, ...COPY[lang].stations[i] }));
+    }
+
+    const machine = document.getElementById("machine");
+    const panel = document.getElementById("panel");
+    const scene = document.getElementById("scene");
+    const standerHost = document.getElementById("stander");
+    let lastIdx = 0;
+    const holo = { walking: false, flip: false, yaw: 0 };
+
+    function createHoloStander() {
+      const root = new THREE.Group();
+      const dark = new THREE.MeshStandardMaterial({
+        color: 0x161616,
+        roughness: 0.82,
+        metalness: 0.04,
+      });
+      const leafMat = new THREE.MeshStandardMaterial({
+        color: 0x2a9a48,
+        roughness: 0.45,
+        metalness: 0.05,
+        emissive: 0x0d3a1c,
+        emissiveIntensity: 0.35,
+      });
+      const scleraMat = new THREE.MeshPhysicalMaterial({
+        color: 0xf6f6f3,
+        roughness: 0.07,
+        metalness: 0,
+        clearcoat: 1,
+        clearcoatRoughness: 0.06,
+      });
+      const irisMat = new THREE.MeshStandardMaterial({
+        color: 0x1a4f2c,
+        roughness: 0.28,
+        emissive: 0x0a2816,
+        emissiveIntensity: 0.22,
+      });
+      const irisInner = new THREE.MeshStandardMaterial({
+        color: 0x0e2e18,
+        roughness: 0.32,
+      });
+      const pupilMat = new THREE.MeshBasicMaterial({ color: 0x050805 });
+
+      const body = new THREE.Mesh(new THREE.SphereGeometry(1, 56, 56), dark);
+      root.add(body);
+
+      const eye = new THREE.Group();
+      eye.position.set(0, 0.1, 0.78);
+      const sclera = new THREE.Mesh(new THREE.SphereGeometry(0.42, 36, 36), scleraMat);
+      sclera.scale.set(1, 1, 0.72);
+      const iris = new THREE.Mesh(new THREE.SphereGeometry(0.26, 32, 32), irisMat);
+      iris.position.set(0.01, 0.02, 0.16);
+      const irisCore = new THREE.Mesh(new THREE.SphereGeometry(0.16, 24, 24), irisInner);
+      irisCore.position.set(0.012, 0.022, 0.22);
+      const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 16), pupilMat);
+      pupil.position.set(0.015, 0.025, 0.28);
+      const glint = new THREE.Mesh(new THREE.SphereGeometry(0.055, 12, 12), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+      glint.position.set(-0.11, 0.12, 0.32);
+      const glint2 = new THREE.Mesh(new THREE.SphereGeometry(0.022, 8, 8), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+      glint2.position.set(0.08, -0.06, 0.3);
+      eye.add(sclera, iris, irisCore, pupil, glint, glint2);
+      root.add(eye);
+
+      const stem = new THREE.Group();
+      const s1 = new THREE.Mesh(new THREE.CapsuleGeometry(0.055, 0.32, 6, 10), dark);
+      s1.position.set(0.08, 1.06, 0.02);
+      s1.rotation.z = -0.38;
+      const s2 = new THREE.Mesh(new THREE.CapsuleGeometry(0.045, 0.26, 6, 10), dark);
+      s2.position.set(0.3, 1.36, 0.04);
+      s2.rotation.z = -0.72;
+      stem.add(s1, s2);
+      root.add(stem);
+
+      const blade = new THREE.Mesh(new THREE.SphereGeometry(0.22, 16, 16), leafMat);
+      blade.scale.set(1.7, 0.24, 0.7);
+      blade.position.set(0.54, 1.54, 0.05);
+      blade.rotation.z = 0.46;
+      root.add(blade);
+
+      const arms = [];
+      [[-1, 0.48], [1, -0.48]].forEach(([side, rot]) => {
+        const arm = new THREE.Group();
+        const limb = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.2, 6, 10), dark);
+        limb.rotation.z = rot;
+        const hand = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 12), dark);
+        hand.position.set(side * 0.22, -0.06, 0.04);
+        arm.position.set(side * 0.9, -0.14, 0.16);
+        arm.add(limb, hand);
+        root.add(arm);
+        arms.push(limb);
+      });
+      const legs = [];
+      [-0.3, 0.3].forEach((x) => {
+        const leg = new THREE.Mesh(new THREE.CapsuleGeometry(0.13, 0.12, 6, 10), dark);
+        leg.position.set(x, -0.98, 0.1);
+        root.add(leg);
+        legs.push(leg);
+      });
+
+      const smile = new THREE.Mesh(
+        new THREE.TorusGeometry(0.11, 0.012, 8, 16, Math.PI * 0.85),
+        new THREE.MeshBasicMaterial({ color: 0x0a0a0a })
+      );
+      smile.position.set(0, -0.34, 0.86);
+      smile.rotation.set(Math.PI, 0, 0);
+      root.add(smile);
+
+      const pad = new THREE.Mesh(
+        new THREE.RingGeometry(0.45, 1.05, 48),
+        new THREE.MeshBasicMaterial({ color: 0x3dff9a, transparent: true, opacity: 0.22, side: THREE.DoubleSide })
+      );
+      pad.rotation.x = -Math.PI / 2;
+      pad.position.y = -1.18;
+      root.add(pad);
+
+      const scan = new THREE.Mesh(
+        new THREE.RingGeometry(0.25, 1.0, 32),
+        new THREE.MeshBasicMaterial({ color: 0x7dffb8, transparent: true, opacity: 0.16, side: THREE.DoubleSide })
+      );
+      scan.rotation.x = -Math.PI / 2;
+      root.add(scan);
+
+      const mark = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.42, 0.42),
+        new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.95 })
+      );
+      mark.position.set(0, -1.42, 0.02);
+      root.add(mark);
+      new THREE.TextureLoader().load("public/images/standx-mark.png", (tex) => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        mark.material.map = tex;
+        mark.material.needsUpdate = true;
+      });
+
+      root.userData = { body, sclera, iris, pupil, blade, arms, legs, smile, ring: pad, scan, mark };
+      return root;
+    }
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const world = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 40);
+    camera.position.set(0, 0.35, 6.4);
+    camera.lookAt(0, 0.2, 0);
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setClearColor(0x000000, 0);
+    renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+    standerHost.appendChild(renderer.domElement);
+
+    world.add(new THREE.AmbientLight(0xffffff, 0.42));
+    world.add(new THREE.HemisphereLight(0xf2f0ea, 0x0a0c0e, 0.7));
+    const key = new THREE.DirectionalLight(0xffe8c8, 1.35);
+    key.position.set(-2.4, 3.8, 3.2);
+    world.add(key);
+    const fill = new THREE.PointLight(0x3dff9a, 0.45, 12, 2);
+    fill.position.set(1.8, 1.2, 2.4);
+    world.add(fill);
+    const rim = new THREE.PointLight(0xffffff, 0.55, 10, 2);
+    rim.position.set(0.2, 0.4, -2.6);
+    world.add(rim);
+
+    const mascot = createHoloStander();
+    mascot.position.y = 0.22;
+    mascot.scale.setScalar(1.12);
+    world.add(mascot);
+
+    function sizeCanvas() {
+      const w = standerHost.clientWidth || 176;
+      const h = standerHost.clientHeight || 228;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      camera.lookAt(0, 0.2, 0);
+    }
+    sizeCanvas();
+    window.addEventListener("resize", sizeCanvas);
+
+    let drag = false;
+    let lastX = 0;
+    standerHost.addEventListener("pointerdown", (e) => {
+      drag = true;
+      lastX = e.clientX;
+      standerHost.setPointerCapture(e.pointerId);
+    });
+    standerHost.addEventListener("pointermove", (e) => {
+      if (!drag) return;
+      holo.yaw += (e.clientX - lastX) * 0.012;
+      lastX = e.clientX;
+    });
+    window.addEventListener("pointerup", () => { drag = false; });
+
+    const clock = new THREE.Clock();
+    function tick() {
+      const t = clock.getElapsedTime();
+      const u = mascot.userData;
+      const walk = holo.walking;
+      const bob = Math.sin(t * (walk ? 8 : 1.6)) * (walk ? 0.16 : 0.08);
+      mascot.position.y = 0.22 + bob;
+      const face = holo.flip ? 0.9 : walk ? -0.55 : 0;
+      mascot.rotation.y = holo.yaw + face + (reduceMotion ? 0 : Math.sin(t * 0.55) * 0.28);
+      mascot.rotation.x = Math.sin(t * 0.7) * 0.04;
+      if (u.blade) u.blade.rotation.z = 0.48 + Math.sin(t * 2.4) * 0.16;
+      if (u.iris) {
+        const look = Math.sin(t * 0.8) * 0.05;
+        u.iris.position.x = 0.01 + look;
+        u.pupil.position.x = 0.015 + look;
+      }
+      if (u.mark) u.mark.lookAt(camera.position);
+      if (u.sclera) {
+        const blink = (t % 3.5) > 3.32 ? 0.1 : 1;
+        u.sclera.scale.y = blink;
+        u.iris.scale.y = blink;
+      }
+      if (u.arms) {
+        u.arms[0].rotation.z = 0.52 + Math.sin(t * (walk ? 9 : 2.1)) * (walk ? 0.45 : 0.18);
+        u.arms[1].rotation.z = -0.52 + Math.sin(t * (walk ? 9 : 2.1) + 1.2) * (walk ? 0.45 : 0.18);
+      }
+      if (u.scan) {
+        u.scan.position.y = -1.1 + ((t * 0.85) % 2.4);
+        u.scan.material.opacity = 0.15 + Math.sin(t * 4) * 0.1;
+      }
+      if (u.ring) u.ring.rotation.z = t * 0.7;
+      renderer.render(world, camera);
+      requestAnimationFrame(tick);
+    }
+    tick();
+
+    function renderPanel(s) {
+      const t = COPY[lang];
+      const idx = BASE.findIndex((x) => x.id === s.id);
+      const beat = tracing ? (BEATS[lang] || BEATS.en)[idx] : null;
+      const title = beat ? beat.title : s.title;
+      const body = beat ? beat.line : s.body;
+      const kicker = beat ? beat.tag : s.tag;
+      panel.innerHTML = `
+        ${beat ? `<p class="beat">${beat.tag}</p>` : `<p class="kicker">${s.tag}</p>`}
+        <h2>${title}</h2>
+        <p>${body}</p>
+        <ul class="facts">${s.facts.map((f) => `<li>${f}</li>`).join("")}</ul>
+        <p class="src"><a href="${s.src}" target="_blank" rel="noopener">${t.source}</a></p>
+      `;
+      const hud = document.getElementById("hud");
+      if (hud && beat) hud.innerHTML = `<b>${beat.tag}</b>${beat.line}`;
+    }
+
+    BASE.forEach((s, i) => {
+      const btn = document.createElement("button");
+      btn.className = "chamber" + (i === 0 ? " on" : "");
+      btn.type = "button";
+      btn.dataset.id = s.id;
+      btn.innerHTML = `<span class="door"><span class="leaf"><i class="hinge a"></i><i class="hinge b"></i><i class="handle"></i><i class="window"></i><b>${s.tag}</b><strong>${s.name}</strong></span></span><span class="plaque">${s.name}</span>`;
+      btn.addEventListener("click", () => {
+        if (traceTimer) { clearInterval(traceTimer); traceTimer = null; }
+        tracing = false;
+        scene.classList.remove("tracing");
+        document.getElementById("trace").disabled = false;
+        select(s.id);
+      });
+      machine.appendChild(btn);
+    });
+
+    let firstPark = true;
+    let currentId = "dusd";
+    let tracing = false;
+    let liveState = { kind: "wait" };
+
+    function paintLive() {
+      const t = COPY[lang];
+      const el = document.getElementById("live");
+      if (liveState.kind === "ok") {
+        const vol = liveState.vol ? (liveState.vol / 1e6).toFixed(1) + "M" : "—";
+        el.innerHTML = t.liveOk.replace("{n}", liveState.n).replace("{vol}", vol);
+      } else if (liveState.kind === "fail") {
+        el.innerHTML = t.liveFail.replace("{url}", DOCS.perpsUi);
+      } else {
+        el.textContent = t.liveWait;
+      }
+    }
+
+    function applyLang() {
+      const t = COPY[lang];
+      document.documentElement.lang = lang;
+      document.querySelectorAll("[data-i]").forEach((el) => {
+        el.textContent = t[el.dataset.i] || el.textContent;
+      });
+      standerHost.title = t.drag;
+      document.querySelectorAll("#langs button").forEach((b) => b.classList.toggle("on", b.dataset.id === lang));
+      paintLive();
+      const list = stations();
+      document.querySelectorAll(".chamber").forEach((el) => {
+        const s = list.find((x) => x.id === el.dataset.id);
+        if (!s) return;
+        el.querySelector(".leaf b").textContent = s.tag;
+        el.querySelector(".leaf strong").textContent = s.name;
+        const pl = el.querySelector(".plaque");
+        if (pl) pl.textContent = s.name;
+      });
+      renderPanel(list.find((x) => x.id === currentId) || list[0]);
+    }
+
+    const langsEl = document.getElementById("langs");
+    LANGS.forEach((l) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.dataset.id = l.id;
+      b.textContent = l.short;
+      b.addEventListener("click", () => {
+        lang = l.id;
+        try { localStorage.setItem(LANG_KEY, lang); } catch (_) {}
+        applyLang();
+      });
+      langsEl.appendChild(b);
+    });
+
+    function doorLeft(idx) {
+      const n = Math.max(1, BASE.length - 1);
+      return 4 + (idx / n) * 74 + "%";
+    }
+
+    let transitLock = false;
+    let transitTimers = [];
+    function later(ms, fn) {
+      const id = setTimeout(fn, ms);
+      transitTimers.push(id);
+      return id;
+    }
+    function clearTransit() {
+      transitTimers.forEach(clearTimeout);
+      transitTimers = [];
+      scene.classList.remove("tunnel");
+      standerHost.classList.remove("enter", "inside", "exit", "walk");
+      document.querySelectorAll(".chamber").forEach((el) => el.classList.remove("in", "out"));
+      transitLock = false;
+    }
+
+    function goThrough(fromIdx, toIdx, done) {
+      if (fromIdx === toIdx) {
+        lastIdx = toIdx;
+        standerHost.style.left = doorLeft(toIdx);
+        done?.();
+        return;
+      }
+      clearTransit();
+      transitLock = true;
+      const doors = [...document.querySelectorAll(".chamber")];
+      const from = doors[fromIdx];
+      const to = doors[toIdx];
+      holo.flip = toIdx < fromIdx;
+      standerHost.classList.toggle("flip", holo.flip);
+      standerHost.style.left = doorLeft(fromIdx);
+      from.classList.add("on", "in");
+      holo.walking = true;
+      standerHost.classList.add("walk");
+
+      later(280, () => standerHost.classList.add("enter"));
+      later(820, () => {
+        standerHost.classList.add("inside");
+        standerHost.classList.remove("enter", "walk");
+        holo.walking = false;
+        scene.classList.add("tunnel");
+        from.classList.remove("in", "on");
+        to.classList.add("on", "out");
+        standerHost.style.transition = "none";
+        standerHost.style.left = doorLeft(toIdx);
+        standerHost.getBoundingClientRect();
+        standerHost.style.transition = "";
+      });
+      later(1180, () => {
+        scene.classList.remove("tunnel");
+        standerHost.classList.remove("inside");
+        standerHost.classList.add("exit");
+      });
+      later(1950, () => {
+        standerHost.classList.remove("exit", "flip");
+        to.classList.remove("out");
+        to.classList.add("on");
+        lastIdx = toIdx;
+        transitLock = false;
+        transitTimers = [];
+        done?.();
+      });
+    }
+
+    function parkStander(idx) {
+      if (firstPark) {
+        firstPark = false;
+        lastIdx = idx;
+        standerHost.style.left = doorLeft(idx);
+        return;
+      }
+      goThrough(lastIdx, idx);
+    }
+
+    let traceTimer;
+
+    function select(id, move = true) {
+      const list = stations();
+      const s = list.find((x) => x.id === id);
+      const idx = list.findIndex((x) => x.id === id);
+      currentId = id;
+      document.querySelectorAll(".chamber").forEach((el) => el.classList.toggle("on", el.dataset.id === id));
+      renderPanel(s);
+      if (move) parkStander(idx);
+    }
+    applyLang();
+    select("dusd");
+
+    document.getElementById("trace").addEventListener("click", () => {
+      if (traceTimer) clearInterval(traceTimer);
+      tracing = true;
+      scene.classList.add("tracing");
+      const btn = document.getElementById("trace");
+      btn.disabled = true;
+      const order = BASE.map((s) => s.id);
+      let i = 0;
+      select(order[0]);
+      traceTimer = setInterval(() => {
+        i += 1;
+        if (i >= order.length) {
+          clearInterval(traceTimer);
+          traceTimer = null;
+          tracing = false;
+          btn.disabled = false;
+          window.setTimeout(() => scene.classList.remove("tracing"), 1600);
+          select(order[order.length - 1], false);
+          return;
+        }
+        select(order[i]);
+      }, 2500);
+    });
+
+    fetch("https://perps.standx.com/api/query_market_overview")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((raw) => {
+        const list = raw?.data?.symbols || raw?.symbols || [];
+        const vol = list.reduce((a, s) => a + Number(s.volume_quote_24h || s.quote_volume_24h || 0), 0);
+        const n = list.length;
+        if (!n) throw 0;
+        liveState = { kind: "ok", n, vol };
+        paintLive();
+      })
+      .catch(() => {
+        liveState = { kind: "fail" };
+        paintLive();
+      });
+  </script>
+</body>
+</html>
